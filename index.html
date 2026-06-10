@@ -1,0 +1,2080 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>拾句 · 极简集藏</title>
+   
+
+
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Helvetica, Arial, sans-serif;
+            color: #1c1c1e;
+            padding: 20px 16px 40px;
+            min-height: 100vh;
+        }
+
+        .app, .page-container {
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 0 4px;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #1c1c1e 0%, #3a3a3e 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.3px;
+        }
+        .sub {
+            font-size: 0.7rem;
+            color: #8e8e93;
+            margin-top: 2px;
+            font-weight: 400;
+        }
+
+        .header-actions-right {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .icon-circle {
+            background: transparent;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            color: #007aff;
+            transition: all 0.1s ease;
+        }
+        .icon-circle:active {
+            background-color: #e5e5ea;
+            transform: scale(0.96);
+        }
+
+        .section-card {
+            background: transparent;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .section-header-custom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 4px 4px 4px;
+            cursor: pointer;
+            background: transparent;
+        }
+        .section-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 590;
+            font-size: 1rem;
+            color: #1c1c1e;
+        }
+        .section-toggle-icon {
+            font-size: 0.75rem;
+            color: #8e8e93;
+            transition: transform 0.2s;
+            width: 16px;
+            display: inline-block;
+            text-align: center;
+        }
+        .section-count {
+            background: #e9e9ef;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #6c6c70;
+        }
+
+        .two-columns {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 12px 16px;
+        }
+        .col {
+            flex: 1;
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .primary-cat {
+            background: #f8f8fc;
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.1s;
+            border: 0.5px solid #efeff4;
+        }
+        .primary-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            cursor: pointer;
+            background: #ffffff;
+        }
+        .primary-header:active {
+            background-color: #f2f2f6;
+        }
+        .primary-title {
+            font-size: 0.9rem;
+            font-weight: 590;
+            color: #1c1c1e;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex: 1;
+        }
+        .collapse-icon {
+            font-size: 0.7rem;
+            color: #8e8e93;
+            width: 18px;
+        }
+
+        .secondary-area {
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            gap: 0px;
+            background-color: transparent;
+            position: relative;
+        }
+
+        .secondary-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px 12px 28px;
+            cursor: pointer;
+            position: relative;
+            font-weight: 400;
+            min-height: 48px;
+            background: #ffffff;
+        }
+
+        .secondary-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 16px;
+            right: 16px;
+            height: 0.5px;
+            background-color: #e5e5ea;
+        }
+
+        .secondary-item:active {
+            background-color: #f2f2f6;
+        }
+        .secondary-emoji {
+            font-size: 0.85rem;
+            min-width: 28px;
+        }
+        .secondary-name {
+            font-size: 0.85rem;
+            font-weight: 450;
+            color: #1c1c1e;
+            flex: 1;
+        }
+        .empty-sub {
+            font-size: 0.7rem;
+            color: #aaa;
+            text-align: center;
+            padding: 12px;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 14px 16px;
+        }
+        .tag-item {
+            background: #e9e9ef;
+            padding: 3px 11px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: #1c1c1e;
+            cursor: pointer;
+            transition: 0.05s linear;
+            line-height: 1.4;
+        }
+        .tag-item:active {
+            background: #d1d1d6;
+            transform: scale(0.96);
+        }
+        
+        .add-tag-form {
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px 16px;
+            border-top: 0.5px solid #efeff4;
+            margin-top: 4px;
+        }
+        .add-tag-form input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 0.5px solid #e2e2e6;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            background: #ffffff;
+        }
+
+        .sentence-dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.3);
+            backdrop-filter: blur(10px);
+            z-index: 1400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            visibility: hidden;
+            opacity: 0;
+            transition: 0.2s;
+        }
+        .sentence-dialog.active {
+            visibility: visible;
+            opacity: 1;
+        }
+        .dialog-content {
+            background: #ffffff;
+            width: 90%;
+            max-width: 480px;
+            border-radius: 24px;
+            padding: 20px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        .sentence-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #f5f5f7;
+            z-index: 1050;
+            overflow-y: auto;
+            visibility: hidden;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+            padding: 20px 16px 30px;
+        }
+        .sentence-page.open {
+            visibility: visible;
+            opacity: 1;
+        }
+        .page-header {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 14px 18px;
+            margin-bottom: 16px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+        }
+        .page-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        .type-switch {
+            display: flex;
+            gap: 8px;
+            background: #f2f2f6;
+            border-radius: 40px;
+            padding: 3px;
+        }
+        .type-btn {
+            background: transparent;
+            border: none;
+            font-size: 0.75rem;
+            padding: 4px 7px;
+            border-radius: 40px;
+            cursor: pointer;
+            color: #8e8e93;
+        }
+        .type-btn.active {
+            background: #ffffff;
+            color: #61A2DA;
+        }
+        .sentence-list-page {
+            background: #ffffff;
+            border-radius: 20px;
+            overflow: hidden;
+            margin: 8px 0 20px;
+        }
+        .sentence-card {
+            padding: 14px 16px;
+            border-bottom: 0.5px solid #efeff4;
+            display: flex;
+            gap: 12px;
+            cursor: pointer;
+            align-items: center;
+        }
+        .sentence-card:active {
+            background: #f9f9fb;
+        }
+        .sentence-card > div:first-child {
+            color: #8e8e93;
+            font-size: 0.85rem;
+        }
+        .add-form {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 12px;
+            display: flex;
+            gap: 10px;
+        }
+        .small-round-btn {
+            background: #007aff;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 30px;
+            color: white;
+            font-weight: 500;
+        }
+
+        .cat-manage-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            padding: 4px 0;
+        }
+        .cat-card {
+            background: #f8f8fc;
+            border-radius: 16px;
+            overflow: hidden;
+            break-inside: avoid;
+        }
+        .cat-card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 14px;
+            background: #ffffff;
+        }
+        .cat-name {
+            font-weight: 590;
+            font-size: 0.9rem;
+        }
+        .icon-mini {
+            background: transparent;
+            border: none;
+            font-size: 0.9rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            color: #8e8e93;
+            cursor: pointer;
+        }
+        .add-cat-section {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .add-cat-input {
+            flex: 1;
+            padding: 10px 12px;
+            border: 0.5px solid #e2e2e6;
+            border-radius: 30px;
+        }
+        .add-cat-submit {
+            background: transparent;
+            border: transparent;
+            width: 36px;
+            height: 36px;
+            border-radius: 30px;
+            color: #8e8e93;
+            cursor: pointer;
+            font-size: 1.2rem;
+            padding: 0;
+        }
+
+        .sub-list {
+            padding: 8px 12px 8px 16px;
+            background: #fafafd;
+        }
+        .sub-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 0.8rem;
+        }
+
+        .add-sub-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.2rem;
+            width: 35px;
+            height: 35px;
+            border-radius: 20px;
+            color: #8f8e8e;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .add-sub-btn:active {
+            background-color: #e5e5ea;
+        }
+
+        .secondary-count {
+            font-size: 0.7rem;
+            color: #8e8e93;
+            padding: 2px 8px;
+            border-radius: 20px;
+            flex-shrink: 0;
+            margin-left: 8px;
+            letter-spacing: 1px;
+        }
+
+        .empty-placeholder {
+            text-align: center;
+            padding: 14px 16px;
+            color: #8e8e93;
+            font-size: 0.9rem;
+            line-height: 1.4;
+            background: #ffffff;
+            border-radius: 12px;
+        }
+
+        /* 编辑弹窗中的标签 */
+        .dialog-tag,
+        #dialogTagList span {
+            display: inline-flex !important;
+            align-items: center !important;
+            height: 24px !important;
+            min-height: 24px !important;
+            max-height: 24px !important;
+            line-height: 1 !important;
+            padding: 0 8px !important;
+            margin: 0 !important;
+            box-sizing: border-box !important;
+        }
+
+        #dialogTagList span button {
+            line-height: 1 !important;
+            height: auto !important;
+        }
+
+        /* 全局禁止所有输入框变色 */
+        input, textarea {
+            background: #ffffff !important;
+            border: 0.5px solid #e2e2e6 !important;
+            outline: none !important;
+            box-shadow: none !important;
+        }
+
+        input:focus, textarea:focus {
+            outline: none !important;
+            box-shadow: none !important;
+            border: 0.5px solid #e2e2e6 !important;
+        }
+
+        input:-webkit-autofill {
+            -webkit-box-shadow: 0 0 0 30px #ffffff inset !important;
+            background-color: #ffffff !important;
+        }
+
+        /* ========== 手机版样式 (屏幕宽度 <= 640px) ========== */
+        @media (max-width: 640px) {
+            body {
+                padding: 16px 14px 32px;
+            }
+            
+            .two-columns {
+                padding: 12px 4px;
+                gap: 8px;
+            }
+            
+            .primary-cat {
+                margin: 0 2px;
+            }
+        }
+
+        /* ========== 网页版样式 (屏幕宽度 > 640px) ========== */
+        @media (min-width: 641px) {
+            /* 主容器占满全屏 */
+            .app, .page-container {
+                max-width: none;
+                width: 100%;
+                margin: 0;
+                padding: 0 24px;
+            }
+            
+            body {
+                padding: 20px 0 40px;
+            }
+            
+            /* 分类 4 列布局 */
+            .two-columns {
+                display: grid;
+                grid-template-columns: repeat(4, 1fr);
+                gap: 12px;
+                width: 100%;
+                padding: 12px 0;
+            }
+            
+            .two-columns .col {
+                display: contents;
+            }
+            
+            /* 句子列表页面 2 列布局 */
+            .sentence-list-page {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+                background: transparent;
+                border-radius: 0;
+            }
+            
+            .sentence-card {
+                background: #ffffff;
+                border-radius: 16px;
+                border-bottom: none;
+                padding: 16px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+            
+            .sentence-card:active {
+                background: #f2f2f6;
+            }
+        }
+
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 1.5cm;
+            }
+            .toolbar, .settings-modal, .add-form, .header-actions, .section-header, .tags-area,
+            .sentence-dialog, .settings-icon, .btn-outline, .type-switch, .back-btn, .print-btn-page,
+            .header-row, .app > .toolbar, .app > .section-header, .app > .tags-area,
+            #categorySectionContent, #tagSectionContent, .add-form,
+            #batchAddBtn, #printPageBtn, #closePageBtn, .app, .section-card,
+            #categorySectionHeader, #tagSectionHeader {
+                display: none !important;
+            }
+            .page-header {
+                display: block !important;
+                background: white !important;
+                padding: 0 0 16px 0 !important;
+                margin: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .title-with-switch {
+                display: block !important;
+            }
+            .page-title {
+                display: block !important;
+                font-size: 14pt !important;
+                font-weight: 600 !important;
+                color: black !important;
+                text-align: center !important;
+                margin-bottom: 20px !important;
+            }
+            .type-switch {
+                display: none !important;
+            }
+            .sentence-page {
+                position: relative !important;
+                visibility: visible !important;
+                opacity: 1 !important;
+                display: block !important;
+                height: auto !important;
+                overflow: visible !important;
+                padding: 0 !important;
+                margin: 0 !important;
+                background: white !important;
+            }
+            .sentence-list-page {
+                display: block !important;
+                background: white !important;
+                margin: 0 !important;
+                padding: 0 !important;
+                border: none !important;
+                box-shadow: none !important;
+            }
+            .sentence-card {
+                padding: 0 !important;
+                margin: 0 0 6px 0 !important;
+                border: none !important;
+                background: white !important;
+                break-inside: avoid;
+                display: flex;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            .sentence-index {
+                font-size: 11pt !important;
+                font-weight: normal !important;
+                color: black !important;
+                min-width: 32px;
+            }
+            .sentence-text {
+                font-size: 11pt !important;
+                line-height: 2.2 !important;
+                color: black !important;
+                flex: 1;
+            }
+            * {
+                box-shadow: none !important;
+                background: transparent !important;
+            }
+            .sentence-card::after {
+                display: none !important;
+            }
+        }
+    </style>
+
+
+</head>
+<body>
+<div class="app">
+    <div class="header-row">
+        <div class="header">
+            <h1>拾句</h1>
+        </div>
+       
+        <div class="header-actions-right" style="display: flex; gap: 12px; align-items: center;">
+    <!-- 分类管理按钮 - 文档图标 -->
+    <button id="manageCategoryBtn" class="icon-circle" style="padding: 0; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;">
+         <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M7.5,0C3.364,0,0,3.364,0,7.5S3.364,15,7.5,15S15,11.636,15,7.5S11.636,0,7.5,0z M7.5,14C3.916,14,1,11.084,1,7.5S3.916,1,7.5,1S14,3.916,14,7.5S11.084,14,7.5,14z" fill="#8e8e93"/>
+            <polygon points="8,3.5 7,3.5 7,7 3.5,7 3.5,8 7,8 7,11.5 8,11.5 8,8 11.5,8 11.5,7 8,7" fill="#8e8e93"/>
+        </svg>
+        
+    </button>
+
+    <!-- 标签管理按钮 - 队列/列表+加号图标 -->
+    <button id="manageTagsBtn" class="icon-circle" style="padding: 0; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;">
+        <svg width="18" height="18" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6.928,29.996l0.082,0.004c0.266,0 0.52,-0.106 0.708,-0.293c-0,-0 5.041,-5.049 7.573,-7.583c0.187,-0.188 0.442,-0.294 0.707,-0.294c0.266,0 0.52,0.106 0.708,0.294l7.566,7.576c0.192,0.192 0.453,0.3 0.724,0.3l0.001,0c0.552,0 1,-0.448 1,-1l-0,-24c-0,-1.657 -1.343,-3 -3,-3l-13.997,0c-1.657,0 -3,1.343 -3,3l0,23.99c-0,0.53 0.408,0.965 0.928,1.006Zm4.072,-18.038l10,0c0.552,0 1,-0.448 1,-1c-0,-0.552 -0.448,-1 -1,-1l-10,0c-0.552,0 -1,0.448 -1,1c-0,0.552 0.448,1 1,1Zm0,-3.958l10,-0c0.552,0 1,-0.448 1,-1c0,-0.552 -0.448,-1 -1,-1l-10,-0c-0.552,0 -1,0.448 -1,1c0,0.552 0.448,1 1,1Z" fill="#8e8e93" fill-rule="evenodd"/>
+        </svg>
+    </button>
+
+    <!-- 设置按钮 - 齿轮图标 -->
+    <button id="settingsBtn" class="icon-circle" style="padding: 0; display: flex; align-items: center; justify-content: center; width: 32px; height: 32px;">
+        <svg width="26" height="26" viewBox="0 0 91 91" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M64.057,27.726l-6.975,4.029c-0.971-0.686-2.004-1.281-3.086-1.781v-8.061H37.152v8.061c-1.008,0.467-1.979,1.021-2.898,1.654l-6.936-4.111l-8.586,14.488l6.936,4.109c-0.078,0.709-0.115,1.373-0.115,2.01c0,0.574,0.029,1.158,0.092,1.785l-6.98,4.031l8.422,14.584l6.979-4.031c0.973,0.686,2.004,1.281,3.088,1.781v8.061h16.844v-8.061c1.008-0.467,1.977-1.021,2.896-1.654l6.936,4.111l8.586-14.488l-6.934-4.109c0.078-0.705,0.115-1.371,0.115-2.01c0-0.576-0.029-1.158-0.092-1.785l6.98-4.031L64.057,27.726z" fill="#8e8e93" fill-rule="evenodd"/>
+            <path d="M45.5,38.5c-4.5,0-8,3.5-8,8s3.5,8,8,8s8-3.5,8-8S50,38.5,45.5,38.5z" fill="#f5f5f7"/>
+        </svg>
+    </button>
+</div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-header-custom" id="categorySectionHeader">
+            <div class="section-title-group">
+                <span class="section-toggle-icon" id="categoryToggleIcon">▼</span>
+                <span>分类</span>
+            </div>
+            <span class="section-count" id="categoryCount">0</span>
+        </div>
+        <div id="categorySectionContent">
+            <div id="categoriesContainer" class="two-columns"></div>
+        </div>
+    </div>
+
+    <div class="section-card">
+        <div class="section-header-custom" id="tagSectionHeader">
+            <div class="section-title-group">
+                <span class="section-toggle-icon" id="tagToggleIcon">▼</span>
+                <span>标签</span>
+            </div>
+        </div>
+        <div id="tagSectionContent">
+            <div id="globalTagsContainer" class="tag-list"></div>
+            <div class="add-tag-form" style="display: none;">
+                <input type="text" id="newTagInput" placeholder="新增标签...">
+                <button id="addTagBtn" class="small-round-btn" style="background:#e9e9ef; color:#007aff;">添加</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<div id="sentencePage" class="sentence-page">
+    <div class="page-container">
+<div class="page-header">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+            <span class="page-title" id="pageCategoryTitle">——</span>
+            <div class="type-switch">
+                <button class="type-btn active" data-type="good">好句</button>
+                <button class="type-btn" data-type="word">好词</button>
+            </div>
+        </div>
+        <div style="display: flex; gap: 24px; align-items: center;">
+   
+            <button id="batchAddBtn" style="background:transparent; border:none; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+    <svg width="18" height="18" viewBox="0 0 15 15" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M7.5,0C3.364,0,0,3.364,0,7.5S3.364,15,7.5,15S15,11.636,15,7.5S11.636,0,7.5,0z M7.5,14C3.916,14,1,11.084,1,7.5S3.916,1,7.5,1S14,3.916,14,7.5S11.084,14,7.5,14z" fill="#8e8e93"/>
+        <polygon points="8,3.5 7,3.5 7,7 3.5,7 3.5,8 7,8 7,11.5 8,11.5 8,8 11.5,8 11.5,7 8,7" fill="#8e8e93"/>
+    </svg>
+</button>
+  
+            <button id="printPageBtn" style="background:transparent; border:none; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+   
+   
+   
+   
+                <svg width="22" height="22" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M359,184H147a15,15,0,0,1-15-15V63a15,15,0,0,1,15-15H359a15,15,0,0,1,15,15V169A15,15,0,0,1,359,184ZM162,154H344V78H162Z" fill="#8e8e93"/>
+        <path d="M359,450H147a15,15,0,0,1-15-15V272.09a15,15,0,0,1,15-15H359a15,15,0,0,1,15,15V435A15,15,0,0,1,359,450ZM162,420H344V287.09H162Z" fill="#8e8e93"/>
+        <path d="M407.25,379H359a15,15,0,0,1,0-30h48.25a18.9,18.9,0,0,0,18.88-18.88V202.89A18.9,18.9,0,0,0,407.25,184H98.75a18.9,18.9,0,0,0-18.88,18.89V330.12A18.9,18.9,0,0,0,98.75,349H147a15,15,0,0,1,0,30H98.75a48.94,48.94,0,0,1-48.88-48.88V202.89A48.94,48.94,0,0,1,98.75,154h308.5a48.94,48.94,0,0,1,48.88,48.89V330.12A48.94,48.94,0,0,1,407.25,379Z" fill="#8e8e93"/>
+        <path d="M131,236a14.66,14.66,0,0,1-1.48-.07c-.48-.05-1-.13-1.45-.22s-1-.22-1.43-.36-.93-.31-1.38-.5-.89-.4-1.32-.63a12.45,12.45,0,0,1-1.27-.75c-.4-.27-.8-.56-1.18-.87s-.75-.65-1.1-1-.68-.72-1-1.1a14.34,14.34,0,0,1-.87-1.18q-.41-.62-.75-1.26c-.23-.43-.44-.88-.63-1.33s-.35-.92-.5-1.38-.26-1-.36-1.43-.17-1-.22-1.45a15.68,15.68,0,0,1,0-3c.05-.48.13-1,.22-1.45s.22-1,.36-1.43.31-.93.5-1.38.4-.9.63-1.33.48-.85.75-1.26a14.34,14.34,0,0,1,.87-1.18c.31-.38.65-.75,1-1.1s.72-.68,1.1-1,.78-.6,1.18-.87a12.45,12.45,0,0,1,1.27-.75q.65-.34,1.32-.63c.45-.19.92-.35,1.38-.5s1-.26,1.43-.36,1-.17,1.45-.22a16.15,16.15,0,0,1,2.95,0c.49.05,1,.13,1.46.22s1,.22,1.42.36.94.31,1.39.5.89.4,1.32.63a13.63,13.63,0,0,1,1.27.75c.4.27.8.56,1.18.87s.75.65,1.1,1,.67.72,1,1.1.6.78.87,1.18.52.83.75,1.26.44.88.63,1.33.35.92.5,1.38.26,1,.36,1.43.17,1,.22,1.45a15.68,15.68,0,0,1,0,3c-.05.48-.13,1-.22,1.45s-.22,1-.36,1.43-.31.93-.5,1.38-.4.9-.63,1.33-.48.85-.75,1.26-.57.8-.87,1.18-.65.75-1,1.1-.72.68-1.1,1-.78.6-1.18.87a13.63,13.63,0,0,1-1.27.75q-.65.34-1.32.63c-.45.19-.92.35-1.39.5s-.94.26-1.42.36-1,.17-1.46.22A14.46,14.46,0,0,1,131,236Z" fill="#8e8e93"/>
+        <path d="M175,236c-.49,0-1,0-1.48-.07s-1-.13-1.45-.22-1-.22-1.43-.36-.93-.31-1.38-.5-.9-.4-1.33-.63-.85-.48-1.26-.75a14.34,14.34,0,0,1-1.18-.87c-.38-.31-.75-.65-1.1-1s-.68-.72-1-1.1-.6-.78-.87-1.18a14.69,14.69,0,0,1-.76-1.27c-.22-.43-.43-.87-.62-1.32s-.35-.92-.5-1.38-.26-1-.36-1.43-.17-1-.22-1.45a15.68,15.68,0,0,1,0-3c.05-.48.13-1,.22-1.45s.22-1,.36-1.43.31-.93.5-1.38.4-.89.62-1.32a14.69,14.69,0,0,1,.76-1.27c.27-.4.56-.8.87-1.18s.65-.75,1-1.1.72-.68,1.1-1a14.34,14.34,0,0,1,1.18-.87q.62-.41,1.26-.75c.43-.23.88-.44,1.33-.63s.92-.35,1.38-.5,1-.26,1.43-.36,1-.17,1.45-.22a16.26,16.26,0,0,1,3,0c.48.05,1,.13,1.45.22s1,.22,1.43.36.93.31,1.38.5.89.4,1.32.63.86.48,1.27.75.8.56,1.18.87.75.65,1.1,1,.67.72,1,1.1.6.78.87,1.18a14.6,14.6,0,0,1,.75,1.27q.34.65.63,1.32c.19.45.35.92.5,1.38s.26,1,.36,1.43.17,1,.22,1.45a15.68,15.68,0,0,1,0,3c-.05.48-.13,1-.22,1.45s-.22,1-.36,1.43-.31.93-.5,1.38-.4.89-.63,1.32a14.6,14.6,0,0,1-.75,1.27c-.27.4-.57.8-.87,1.18s-.65.75-1,1.1-.72.68-1.1,1-.78.6-1.18.87-.84.52-1.27.75-.87.44-1.32.63-.92.35-1.38.5-1,.26-1.43.36-1,.17-1.45.22S175.49,236,175,236Z" fill="#8e8e93"/>
+        <path d="M312,344H194a15,15,0,0,1,0-30H312a15,15,0,0,1,0,30Z" fill="#8e8e93"/>
+        <path d="M312,397H194a15,15,0,0,1,0-30H312a15,15,0,0,1,0,30Z" fill="#8e8e93"/>
+    </svg>
+</button>
+   
+         <!-- 返回按钮 - 向左箭头 -->
+<button id="closePageBtn" class="back-btn" style="background:transparent; border:none; padding: 0; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+    <svg width="20" height="20" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M45.4,23.6c-2.7-2.6-6.4-4.1-10.2-4.1c-4,0-8,0-12.1,0c-0.3,0-0.7,0-1,0c1.3-1.3,2.5-2.5,3.8-3.8c0.9-0.9,0.9-2.4,0-3.2c-0.9-0.9-2.4-0.9-3.2,0c-2.5,2.5-5,5-7.5,7.5c-0.9,0.9-0.9,2.4,0,3.2c2.6,2.6,5.1,5.1,7.8,7.8c0.9,0.9,2.4,0.9,3.2,0c0.9-0.9,0.9-2.4,0-3.2c-1.3-1.3-2.5-2.5-3.8-3.8c3.8,0,7.4,0,11.2,0c0.6,0,1.1,0,1.7,0c6.1,0.1,11,5.7,9.7,11.8c-0.6,3-2.4,5.4-5,6.9c-2.2,1.1-4.5,1.1-6.9,1.1c-3,0-3,4.6,0,4.6c2.4,0,4.7,0,7-0.8c3.1-1.1,5.8-3.3,7.5-6.1C51.1,35.8,50.2,28.2,45.4,23.6z" fill="#8e8e93"/>
+    </svg>
+</button>   
+
+</div>
+    </div>
+</div>
+
+        <div id="sentencePageList" class="sentence-list-page"></div>
+        <div class="add-form" style="display: none;">
+            <input type="text" id="pageSentenceInput" placeholder="根据当前类型添加内容...">
+            <button id="pageAddSentenceBtn" class="small-round-btn">留存</button>
+        </div>
+    </div>
+</div>
+
+<div id="categoryManageDialog" class="sentence-dialog">
+    <div class="dialog-content" style="position: relative;">
+        <button id="closeManageDialogBtn" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 0.9rem; color: #8e8e93; cursor: pointer; width: 32px; height: 32px; border-radius: 20px;">✕</button>
+        <h4 style="margin-bottom: 16px;">类别管理</h4>
+        <div class="add-cat-section">
+            <input type="text" id="newCatName" class="add-cat-input" placeholder="新类别名称">
+            <button id="doAddCategoryBtn" class="add-cat-submit">+</button>
+        </div>
+        <div id="catManageList" class="cat-manage-container"></div>
+    </div>
+</div>
+
+<div id="editSubDialog" class="sentence-dialog">
+    <div class="dialog-content" style="max-width: 360px; max-height: 80vh; overflow-y: auto;">
+        <h4 style="margin-bottom: 16px;">✏️ 编辑子分类</h4>
+        <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px;">子分类名称</div>
+            <input type="text" id="editSubName" placeholder="名称" style="width:100%; padding:10px; border:0.5px solid #e5e5ea; border-radius: 12px;">
+        </div>
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px;">图标 Emoji</div>
+            <input type="text" id="editSubEmoji" placeholder="例如: ☀️ 📝 🌸" value="📝" style="width:100%; padding:10px; border:0.5px solid #e5e5ea; border-radius: 12px;">
+        </div>
+        <div style="margin-bottom: 20px; border-top: 0.5px solid #e5e5ea; padding-top: 16px;">
+            <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 8px;">🏷️ 关联标签</div>
+            <div style="font-size: 0.7rem; color: #007aff; margin-bottom: 8px; background: #e8f0fe; padding: 6px 10px; border-radius: 12px;">
+                📌 默认标签：<strong id="defaultTagDisplay"></strong>（与子分类同名）
+            </div>
+            <div style="font-size: 0.7rem; color: #6c6c70; margin: 8px 0 4px;">额外标签：</div>
+            <div id="editSubCustomTagsList" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; min-height: 32px;"></div>
+            <div style="display: flex; gap: 8px; align-items: center; margin-top: 8px;">
+                <input type="text" id="editSubNewTag" placeholder="添加额外标签" style="flex: 1; padding: 8px 12px; border: 0.5px solid #e5e5ea; border-radius: 20px; font-size: 0.8rem;">
+                <button id="editSubAddTagBtn" style="background: #e9e9ef; border: none; width: 36px; height: 36px; border-radius: 30px; font-size: 1rem; color: #007aff; cursor: pointer;">+</button>
+            </div>
+            <div style="font-size: 0.65rem; color: #8e8e93; margin-top: 8px;">💡 句子加上这些标签后，会自动出现在本分类中</div>
+        </div>
+        <div style="display: flex; gap: 12px; justify-content: flex-end; flex-wrap: wrap; border-top: 0.5px solid #e5e5ea; padding-top: 16px;">
+            <button id="editSubDeleteBtn" style="background: #fff0ef; border: none; padding: 8px 18px; border-radius: 30px; color: #ff3b30; font-weight: 500; cursor: pointer;">🗑️ 删除</button>
+            <button id="editSubCancelBtn" style="background: #e9e9ef; border: none; padding: 8px 18px; border-radius: 30px; cursor: pointer;">取消</button>
+            <button id="editSubConfirmBtn" style="background: #007aff; color: white; border: none; padding: 8px 18px; border-radius: 30px; cursor: pointer;">保存</button>
+        </div>
+    </div>
+</div>
+
+<div id="batchAddDialog" class="sentence-dialog">
+    <div class="dialog-content">
+        <h4 style="margin-bottom: 12px;">添加</h4>
+        <textarea id="batchAddTextarea" rows="8" placeholder="每行一条内容" style="width:100%; padding:12px; border-radius:16px; border:0.5px solid #ddd; font-size: 1rem; line-height: 1.5;"></textarea>
+        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 16px;">
+            <button id="batchAddCancelBtn" style="background:#e9e9ef; border:none; padding:8px 18px; border-radius:30px;">取消</button>
+            <button id="batchAddConfirmBtn" style="background:#61A2DA; color:white; border:none; padding:8px 18px; border-radius:30px;">确认添加</button>
+        </div>
+    </div>
+</div>
+
+<div id="sentenceDialog" class="sentence-dialog">
+    <div class="dialog-content" style="max-width: 400px; padding: 20px; border-radius: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h4 style="font-size: 1.1rem; font-weight: 590; color: #1c1c1e;">编辑内容</h4>
+            <button id="dialogCloseBtn" style="background: transparent; border: none; font-size: 1.2rem; color: #8e8e93; cursor: pointer; width: 32px; height: 32px; border-radius: 20px;">✕</button>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 8px;">内容</div>
+            <textarea id="dialogSentenceText" rows="4" placeholder="写下你的句子或词语..." style="width:100%; padding: 14px; border: 0.5px solid #e2e2e6; border-radius: 20px; font-size: 0.9rem; font-family: inherit; background: #f8f8fa; resize: vertical;"></textarea>
+        </div>
+        <div style="margin-bottom: 20px;">
+    <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 8px;">标签</div>
+    <div id="dialogTagList" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; min-height: auto;"></div>
+    <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+        <input type="text" id="dialogNewTagInput" placeholder="添加标签" style="flex: 1; padding: 8px 14px; border: 0.5px solid #e2e2e6; border-radius: 30px; font-size: 0.8rem; background: #ffffff;">
+        <button id="dialogAddTagBtn" style="background: #e9e9ef; border: none; width: 36px; height: 36px; border-radius: 30px; font-size: 1rem; color: #007aff; cursor: pointer;">+</button>
+    </div>
+</div>
+        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+            <button id="dialogCopyBtn" style="background: #e9e9ef; border: none; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; color: #8e8e93; cursor: pointer;">复制</button>
+            <button id="dialogDeleteBtn" style="background: #fff0ef; border: none; padding: 10px 20px; border-radius: 30px; font-size: 0.85rem; color: #ff3b30; cursor: pointer;">删除</button>
+            <button id="dialogSaveBtn" style="background: #61A2DA; border: none; padding: 10px 24px; border-radius: 30px; font-size: 0.85rem; color: white; cursor: pointer; font-weight: 500;">保存</button>
+        </div>
+    </div>
+</div>
+
+<div id="settingsModal" class="sentence-dialog">
+    <div class="dialog-content" style="max-width: 360px; padding: 24px; border-radius: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <h3 style="font-size: 1.2rem; font-weight: 600; color: #1c1c1e;">☁️ 云端同步</h3>
+            <button id="closeSettings" style="background: transparent; border: none; font-size: 1.2rem; color: #8e8e93; cursor: pointer; width: 32px; height: 32px; border-radius: 20px;">✕</button>
+        </div>
+        <p style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 20px; line-height: 1.4;">使用 GitHub Gist 备份和恢复数据</p>
+        
+<div style="margin-bottom: 16px;">
+    <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px;">GitHub Token</div>
+    <div style="display: flex; gap: 8px; align-items: center;">
+        <input type="password" id="gistToken" placeholder="ghp_xxxxxxxxxxxx" style="flex:1; padding: 12px; border: 0.5px solid #e2e2e6; border-radius: 14px; font-size: 0.85rem; background: #f8f8fa;">
+
+<button type="button" id="toggleTokenVisibility" style="background: transparent; border: none; width: 40px; height: 40px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #8e8e93;">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
+    </svg>
+</button>
+
+    </div>
+</div>
+
+
+        <div style="margin-bottom: 20px;">
+            <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px;">Gist ID</div>
+            <input type="text" id="gistId" placeholder="xxxxxxxxxxxx" style="width:100%; padding: 12px; border: 0.5px solid #e2e2e6; border-radius: 14px; font-size: 0.85rem; background: #f8f8fa;">
+        </div>
+        <div style="display: flex; gap: 12px; margin-bottom: 16px;">
+            <button id="syncToGist" style="flex: 1; background: #007aff; border: none; padding: 12px; border-radius: 30px; font-size: 0.85rem; color: white; font-weight: 500; cursor: pointer;">☁️ 上传备份</button>
+            <button id="restoreFromGist" style="flex: 1; background: #e9e9ef; border: none; padding: 12px; border-radius: 30px; font-size: 0.85rem; color: #007aff; font-weight: 500; cursor: pointer;">⬇️ 恢复云端</button>
+        </div>
+        <div id="syncStatus" style="font-size: 0.7rem; color: #8e8e93; text-align: center; padding: 8px; background: #f8f8fa; border-radius: 12px;"></div>
+    </div>
+</div>
+
+
+<div id="tagsManageDialog" class="sentence-dialog">
+    <div class="dialog-content" style="position: relative; max-width: 400px;">
+        <button id="closeTagsManageBtn" style="position: absolute; top: 16px; right: 16px; background: transparent; border: none; font-size: 0.85rem; color: #8e8e93; cursor: pointer; width: 28px; height: 28px; border-radius: 20px;">✕</button>
+        <h4 style="margin-bottom: 16px;">🏷️ 管理标签</h4>
+        <p style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 12px;">点击标签可删除（仅删除标签本身，不影响句子）</p>
+        <div id="tagsManageList" style="display: flex; flex-wrap: wrap; gap: 10px; max-height: 300px; overflow-y: auto; padding: 4px 0;"></div>
+        <div style="display: flex; gap: 8px; margin-top: 16px;">
+            <input type="text" id="newGlobalTagInput" placeholder="新增标签" style="flex: 1; padding: 10px 12px; border-radius: 30px; border: 0.5px solid #e5e5ea; font-size: 0.85rem;">
+            <button id="addGlobalTagBtn" style="background: #61A2DA; border: none; padding: 0 20px; border-radius: 30px; color: white; font-weight: 500; cursor: pointer;">添加</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    let categories = [];
+    let globalTags = [];
+    let currentDialogContext = null;
+
+    // 为每个网页生成唯一标识（不同网页设置不同值，避免 Gist ID 互相覆盖）
+const PAGE_ID = 'shiju_main';  // 拾句主网页
+// 其他网页可设置为：'shiju_poetry', 'shiju_prose' 等
+
+
+    let currentPageRef = null;
+    let currentListType = 'good';
+    let currentEditSubData = null;
+
+    function genId() { return Date.now() + '-' + Math.random().toString(36).substring(2, 8); }
+
+    function ensureArrays(sec) {
+        if(!sec.goodSentences) sec.goodSentences = [];
+        if(!sec.wordSentences) sec.wordSentences = [];
+        if(!sec.tagsMap) sec.tagsMap = {};
+        if(!sec.emoji) sec.emoji = '📝';
+        if(!sec.customTags) sec.customTags = [];
+    }
+
+    const defaultRaw = [
+        { id: genId(), name: "天气", emoji: "☁️", collapsed: true, children: [{ id: genId(), name: "晴", emoji: "☀️", goodSentences: ["晴空一鹤排云上，便引诗情到碧霄。"], wordSentences: ["万里无云"], tagsMap: {}, customTags: [] }] },
+        { id: genId(), name: "天空", emoji: "🌤️", collapsed: true, children: [{ id: genId(), name: "太阳", emoji: "☀️", goodSentences: ["日出江花红胜火。"], wordSentences: ["旭日东升"], tagsMap: {}, customTags: [] }] },
+        { id: genId(), name: "植物", emoji: "🌿", collapsed: true, children: [{ id: genId(), name: "花", emoji: "🌸", goodSentences: ["花开堪折直须折。"], wordSentences: ["芬芳馥郁"], tagsMap: {}, customTags: [] }] }
+    ];
+
+    function initDefault() { categories = JSON.parse(JSON.stringify(defaultRaw)); globalTags = ["生活", "哲思"]; categories.forEach(c => c.children?.forEach(ensureArrays)); }
+    function saveData() { localStorage.setItem('quote_hub_ios', JSON.stringify({ categories, globalTags })); updateCategoryCount(); }
+    function updateCategoryCount() { const span = document.getElementById('categoryCount'); if(span) span.innerText = categories.length; }
+    function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
+    function splitIntoColumns(arr) { const left=[], right=[]; arr.forEach((item,idx)=>{ if(idx%2===0) left.push(item); else right.push(item); }); return {left,right}; }
+
+
+
+  function loadData() {
+    const stored = localStorage.getItem('quote_hub_ios');
+    if(stored) { 
+        try { 
+            const data = JSON.parse(stored); 
+            categories = data.categories || []; 
+            globalTags = data.globalTags || []; 
+            if(!categories.length) throw new Error(); 
+        } catch(e) { 
+            initDefault(); 
+        } 
+    } else { 
+        initDefault(); 
+    }
+    categories.forEach(c => { 
+        if(c.collapsed === undefined) c.collapsed = true; 
+        if(!c.emoji) c.emoji = '📁'; 
+        c.children?.forEach(ensureArrays); 
+    });
+    renderMain(); 
+    renderGlobalTags(); 
+    updateCategoryCount();
+    
+    // 【新增】迁移现有数据，给所有句子添加默认分类标签
+    migrateAddDefaultTags();
+}
+
+// 迁移函数：给所有已有句子添加其所在子分类名称作为默认标签（放在 loadData 函数后面）
+function migrateAddDefaultTags() {
+    let changed = false;
+    for(const primary of categories) {
+        for(const sub of (primary.children || [])) {
+            const defaultTag = sub.name;
+            
+            // 确保默认标签存在于全局标签中
+            if(!globalTags.includes(defaultTag)) {
+                globalTags.push(defaultTag);
+                changed = true;
+            }
+            
+            // 处理好句
+            if(sub.goodSentences) {
+                for(let i = 0; i < sub.goodSentences.length; i++) {
+                    if(!sub.tagsMap) sub.tagsMap = {};
+                    const tags = sub.tagsMap[i] || [];
+                    if(!tags.includes(defaultTag)) {
+                        tags.push(defaultTag);
+                        sub.tagsMap[i] = tags;
+                        changed = true;
+                    }
+                }
+            }
+            
+            // 处理词语
+            if(sub.wordSentences) {
+                for(let i = 0; i < sub.wordSentences.length; i++) {
+                    if(!sub.tagsMap) sub.tagsMap = {};
+                    const tags = sub.tagsMap[i] || [];
+                    if(!tags.includes(defaultTag)) {
+                        tags.push(defaultTag);
+                        sub.tagsMap[i] = tags;
+                        changed = true;
+                    }
+                }
+            }
+        }
+    }
+    
+    if(changed) {
+        saveData();
+        renderMain();
+        renderGlobalTags();
+        console.log('已为所有句子添加默认分类标签');
+    }
+}
+
+
+
+
+    function renderMain() {
+        const container = document.getElementById('categoriesContainer');
+        if(!container) return;
+        if(categories.length===0) { container.innerHTML='<div class="empty-placeholder" style="padding:20px; text-align:center;">暂无分类</div>'; return; }
+        const {left,right}=splitIntoColumns(categories);
+        const renderCol = (items) => items.map(primary=>{
+            const collapsed=primary.collapsed;
+            const icon=collapsed?'▶':'▼';
+            const childrenHtml = !collapsed ? `<div class="secondary-area">${primary.children?.length ? primary.children.map(sec=>`
+                <div class="secondary-item" data-pid="${primary.id}" data-secid="${sec.id}">
+                    <span class="secondary-emoji">${sec.emoji || '📝'}</span>
+                    <span class="secondary-name">${escapeHtml(sec.name)}</span>
+                    <span class="secondary-count">${sec.goodSentences?.length || 0}|${sec.wordSentences?.length || 0}</span>
+                </div>`).join(''):'<div class="empty-sub">无子分类</div>'}</div>` : '';
+            return `<div class="primary-cat">
+                <div class="primary-header" data-toggle-id="${primary.id}">
+                    <span class="primary-title"><span class="collapse-icon">${icon}</span> ${escapeHtml(primary.name)}</span>
+                </div>
+                ${childrenHtml}
+            </div>`;
+        }).join('');
+        container.innerHTML=`<div class="col">${renderCol(left)}</div><div class="col">${renderCol(right)}</div>`;
+        attachMainEvents();
+    }
+
+    function attachMainEvents() {
+        document.querySelectorAll('.primary-header[data-toggle-id]').forEach(h=>{ h.removeEventListener('click',toggleCollapse); h.addEventListener('click',toggleCollapse); });
+        document.querySelectorAll('.secondary-item').forEach(it=>{ it.removeEventListener('click',onSecondaryClick); it.addEventListener('click',onSecondaryClick); });
+    }
+    function toggleCollapse(e){ const id=e.currentTarget.dataset.toggleId; const cat=categories.find(c=>c.id===id); if(cat){ cat.collapsed=!cat.collapsed; saveData(); renderMain(); } }
+    
+
+function onSecondaryClick(e){ 
+    const item=e.currentTarget; 
+    const pid=item.dataset.pid, secid=item.dataset.secid; 
+    const primary=categories.find(p=>p.id===pid); 
+    if(primary){ 
+        const sec=primary.children.find(c=>c.id===secid); 
+        if(sec){ 
+            currentPageRef = { 
+                type:'category', 
+                primaryId:pid, 
+                secId:secid, 
+                secName:sec.name, 
+                primaryName:primary.name, 
+                goodSentences:sec.goodSentences||[], 
+                wordSentences:sec.wordSentences||[], 
+                tagsMap:sec.tagsMap||{}  // 确保传递 tagsMap
+            }; 
+            openSentencePage(); 
+        } 
+    } 
+}
+
+    function openSentencePage() { updateSentencePageByType(); document.getElementById('sentencePage').classList.add('open'); }
+    function updateSentencePageByType() {
+        if (!currentPageRef) return;
+        let title = '', sentences = [];
+        if (currentPageRef.type === 'category') { title = `${currentPageRef.primaryName} · ${currentPageRef.secName}`; sentences = currentListType === 'good' ? currentPageRef.goodSentences : currentPageRef.wordSentences; }
+        else if (currentPageRef.type === 'tag') { title = `标签 · ${currentPageRef.tagName}`; sentences = currentPageRef.sentences || []; }
+        document.getElementById('pageCategoryTitle').innerText = title;
+        renderSentencePage(sentences);
+    }
+
+function renderSentencePage(sentences){ 
+    const container = document.getElementById('sentencePageList'); 
+    if(!sentences.length){ 
+        container.innerHTML='<div class="empty-placeholder">暂无内容</div>'; 
+        return; 
+    } 
+    let html=''; 
+    sentences.forEach((s,i)=>{ 
+        html+=`<div class="sentence-card" data-idx="${i}"><div>${i+1}.</div><div>${escapeHtml(s)}</div></div>`; 
+    }); 
+    container.innerHTML=html; 
+    
+    document.querySelectorAll('.sentence-card').forEach(c=>{
+        c.addEventListener('click',(e)=>{ 
+            const idx = c.dataset.idx; 
+            
+            if(currentPageRef.type === 'category'){
+                // 从分类进入的编辑
+                const p = categories.find(p => p.id === currentPageRef.primaryId); 
+                const sec = p?.children.find(s => s.id === currentPageRef.secId); 
+                if(sec){ 
+                    const arr = currentListType === 'good' ? sec.goodSentences : sec.wordSentences;
+                    const tags = (sec.tagsMap && sec.tagsMap[idx]) ? sec.tagsMap[idx] : [];
+                    currentDialogContext = {
+                        type: 'category',
+                        primaryId: currentPageRef.primaryId,
+                        secId: currentPageRef.secId,
+                        sentenceIndex: parseInt(idx),
+                        sentenceText: arr[idx],
+                         tags: [...tags], 
+                        listType: currentListType
+                    }; 
+                    openDialog(); 
+                } 
+            } 
+            else if(currentPageRef.type === 'tag'){
+                // 从标签进入的编辑
+                const ref = currentPageRef.tagsMapRef && currentPageRef.tagsMapRef[idx];
+                if(ref){
+                    const p = categories.find(p => p.id === ref.primaryId);
+                    const sec = p?.children.find(s => s.id === ref.secId);
+                    if(sec){
+                        const arr = ref.type === 'good' ? sec.goodSentences : sec.wordSentences;
+                        const tags = (sec.tagsMap && sec.tagsMap[ref.sentenceIndex]) ? sec.tagsMap[ref.sentenceIndex] : [];
+                        currentDialogContext = {
+                            type: 'category',  // 注意：这里还是 category，因为编辑的是原始分类下的句子
+                            primaryId: ref.primaryId,
+                            secId: ref.secId,
+                            sentenceIndex: ref.sentenceIndex,
+                            sentenceText: arr[ref.sentenceIndex],
+                            tags: [...tags], 
+                            listType: ref.type
+                        };
+                        openDialog();
+                    }
+                }
+            }
+        });
+    });
+}
+function openDialog() { 
+    document.getElementById('dialogSentenceText').value = currentDialogContext.sentenceText; 
+    // 确保 tags 是从原始数据重新读取的，而不是沿用旧的引用
+    const primary = categories.find(p => p.id === currentDialogContext.primaryId);
+    const sec = primary?.children.find(c => c.id === currentDialogContext.secId);
+    if(sec && sec.tagsMap && sec.tagsMap[currentDialogContext.sentenceIndex]) {
+        currentDialogContext.tags = [...sec.tagsMap[currentDialogContext.sentenceIndex]];
+    } else {
+        currentDialogContext.tags = [];
+    }
+    renderDialogTags(); 
+    document.getElementById('sentenceDialog').classList.add('active'); 
+}
+function renderDialogTags() {
+    const container = document.getElementById('dialogTagList');
+    if (!container) return;
+    
+    let tags = currentDialogContext.tags || [];
+    
+    if (tags.length === 0) { 
+        container.innerHTML = '<span style="font-size:0.7rem; color:#c6c6c8;">暂无标签</span>'; 
+        return; 
+    }
+    
+    container.innerHTML = tags.map(tag => `
+<span style="background: #e9e9ef; padding: 2px 8px; border-radius: 6px; font-size: 0.7rem; display: inline-flex; align-items: center; gap: 4px; line-height: 1;">            ${escapeHtml(tag)}
+            <button class="dialog-tag-remove" data-tag="${escapeHtml(tag)}" style="background: transparent; border: none; font-size: 0.7rem; color: #8e8e93; cursor: pointer; padding: 0; margin-left: 4px;">✕</button>
+        </span>
+    `).join('');
+    
+    document.querySelectorAll('.dialog-tag-remove').forEach(btn => {
+        // 在 renderDialogTags 函数内，找到 btn.onclick
+btn.onclick = (e) => {
+    e.stopPropagation();
+    const tagToRemove = btn.getAttribute('data-tag');
+    // 过滤掉要删除的标签
+    currentDialogContext.tags = currentDialogContext.tags.filter(t => t !== tagToRemove);
+    renderDialogTags();  // 重新渲染
+};
+    });
+}
+
+function renderGlobalTags(){
+    const c = document.getElementById('globalTagsContainer'); 
+    if(!c) return;
+    
+    // 1. 收集所有子分类的名称 (这些是“默认标签”，不显示在汇总区)
+    const defaultTagNames = new Set();
+    for(const primary of categories) {
+        for(const sub of (primary.children || [])) {
+            if(sub.name) {
+                defaultTagNames.add(sub.name);
+            }
+        }
+    }
+    
+    // 2. 过滤 globalTags: 只保留那些不是子分类名称的标签
+    const filteredTags = globalTags.filter(tag => !defaultTagNames.has(tag));
+    
+    // 3. 渲染过滤后的标签
+    c.innerHTML = filteredTags.map(t => `<div class="tag-item" data-tag="${escapeHtml(t)}">#${escapeHtml(t)}</div>`).join('');
+    
+    // 4. 绑定点击事件 (保持不变)
+    document.querySelectorAll('.tag-item').forEach(el => el.addEventListener('click',()=>{
+        const tag = el.dataset.tag;
+        // ... 后面的代码完全不用动，原样保留 ...
+        let matchedSub = null, matchedPrimary = null;
+        for(const primary of categories) for(const sub of (primary.children || [])) if(sub.name === tag || (sub.customTags && sub.customTags.includes(tag))) { matchedSub = sub; matchedPrimary = primary; break; }
+        const sentencesList = []; const tagsMapRef = {}; let idx = 0;
+        categories.forEach(primary => { primary.children?.forEach(sec => { Object.entries(sec.tagsMap||{}).forEach(([sid,stags])=>{ if(stags && stags.includes(tag)){ const sIdx=parseInt(sid); let text='', type=''; if(sec.goodSentences && sec.goodSentences[sIdx]) { text=sec.goodSentences[sIdx]; type='good'; } else if(sec.wordSentences && sec.wordSentences[sIdx]) { text=sec.wordSentences[sIdx]; type='word'; } if(text){ sentencesList.push(text); tagsMapRef[idx]={ primaryId:primary.id, secId:sec.id, sentenceIndex:sIdx, type:type }; idx++; } } }); }); });
+        let displayTagName = tag; if(matchedSub && matchedPrimary) displayTagName = `${matchedPrimary.name} · ${matchedSub.name} (${tag})`;
+        currentPageRef = { type:'tag', tagName:displayTagName, rawTagName:tag, sentences:sentencesList, tagsMapRef:tagsMapRef }; openSentencePage();
+    }));
+}
+ 
+ 
+   function renderCategoryManageList() {
+    const container = document.getElementById('catManageList'); 
+    if(!container) return;
+    if(categories.length === 0) { 
+        container.innerHTML = '<div style="padding:20px; text-align:center;">暂无类别</div>'; 
+        return; 
+    }
+    
+    container.innerHTML = categories.map(cat => `
+        <div class="cat-card">
+            <div class="cat-card-header" style="cursor: pointer;" data-cat-id="${cat.id}">
+                <span class="cat-name">${escapeHtml(cat.name)} <span style="font-size:0.7rem; color:#aaa;">(${cat.children?.length || 0})</span></span>
+                <div>
+                    <button class="icon-mini edit-cat-btn" data-id="${cat.id}" title="编辑类别" style="font-size:0.75rem;">✎</button>
+                    <span class="cat-expand-icon" style="font-size:0.7rem; color:#8e8e93; margin-left:6px;">▶</span>
+                </div>
+            </div>
+            <div class="sub-list" id="subList-${cat.id}" style="display: none;">
+                ${cat.children?.map(sub => `
+                    <div class="sub-item">
+                        <span>${sub.emoji || '📝'} ${escapeHtml(sub.name)}</span>
+                        <div>
+                            <button class="icon-mini edit-sub-btn" data-cat="${cat.id}" data-sub="${sub.id}" title="编辑子分类" style="font-size:0.75rem;">✎</button>
+                        </div>
+                    </div>
+                `).join('')}
+                <div style="display: flex; gap: 8px; margin-top: 12px; align-items: center;">
+                    <input type="text" id="newSub-${cat.id}" placeholder="新子分类" style="flex: 1; min-width: 0; padding: 8px 12px; border-radius: 20px; border: 0.5px solid #e5e5ea; background: #f8f8fa; font-size: 0.8rem;">
+                    <button class="add-sub-btn" data-cat="${cat.id}" style="background: transparent; border: none; width: 36px; height: 36px; border-radius: 30px; color: #8e8e93; font-size: 1.2rem; cursor: pointer; flex-shrink: 0;">+</button>
+                </div>
+            </div>
+        </div>
+    `).join('');
+    
+    // 绑定展开/收起事件
+    document.querySelectorAll('.cat-card-header').forEach(header => {
+        header.removeEventListener('click', toggleSubList);
+        header.addEventListener('click', toggleSubList);
+    });
+    
+    // 编辑类别
+    document.querySelectorAll('.edit-cat-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const id = btn.dataset.id;
+            const cat = categories.find(c => c.id === id);
+            if(cat) {
+                let newName = prompt('类别名', cat.name);
+                if(newName) cat.name = newName;
+                saveData();
+                renderCategoryManageList();
+                renderMain();
+            }
+        };
+    });
+    
+    // 编辑子分类
+    document.querySelectorAll('.edit-sub-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const catId = btn.dataset.cat, subId = btn.dataset.sub;
+            const cat = categories.find(c => c.id === catId);
+            const sub = cat?.children.find(s => s.id === subId);
+            if(sub) openEditSubDialog(sub, catId, subId);
+        };
+    });
+    
+    // 添加子分类
+    document.querySelectorAll('.add-sub-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const catId = btn.dataset.cat;
+            const input = document.getElementById(`newSub-${catId}`);
+            const name = input?.value.trim();
+            if(name) {
+                const cat = categories.find(c => c.id === catId);
+                if(cat) {
+                    if(!cat.children) cat.children = [];
+                    const newSub = { 
+                        id: genId(), 
+                        name: name, 
+                        emoji: '📝', 
+                        goodSentences: [], 
+                        wordSentences: [], 
+                        tagsMap: {}, 
+                        customTags: [] 
+                    };
+                    cat.children.push(newSub);
+                    if(!globalTags.includes(name)) globalTags.push(name);
+                    saveData();
+                    renderCategoryManageList();
+                    renderMain();
+                    renderGlobalTags();
+                    input.value = '';
+                }
+            }
+        };
+    });
+}
+
+// 展开/收起函数（放在 renderCategoryManageList 函数外面）
+function toggleSubList(e) {
+    // 防止点击编辑按钮时触发
+    if(e.target.classList.contains('edit-cat-btn') || 
+       e.target.classList.contains('edit-sub-btn') || 
+       e.target.classList.contains('add-sub-btn')) {
+        e.stopPropagation();
+        return;
+    }
+    const catCard = e.currentTarget.closest('.cat-card');
+    const subList = catCard.querySelector('.sub-list');
+    const expandIcon = catCard.querySelector('.cat-expand-icon');
+    if(subList) {
+        const isVisible = subList.style.display !== 'none';
+        subList.style.display = isVisible ? 'none' : 'block';
+        if(expandIcon) {
+            expandIcon.innerHTML = isVisible ? '▶' : '▼';
+        }
+    }
+}
+
+    function openEditSubDialog(sub, catId, subId) {
+        currentEditSubData = { catId, subId, sub };
+        const dialog = document.getElementById('editSubDialog');
+        document.getElementById('editSubName').value = sub.name || '';
+        document.getElementById('editSubEmoji').value = sub.emoji || '📝';
+        document.getElementById('defaultTagDisplay').innerText = sub.name;
+        if(!sub.customTags) sub.customTags = [];
+   
+
+function renderCustomTags() {
+    const container = document.getElementById('editSubCustomTagsList');
+    const tags = sub.customTags || [];
+    if(tags.length === 0) { 
+        container.innerHTML = '<span style="font-size:0.65rem; color:#c6c6c8;">暂无</span>'; 
+        return; 
+    }
+    container.innerHTML = tags.map(tag => `
+        <span style="background: #e9e9ef; padding: 0 6px; border-radius: 3px; font-size: 0.7rem; display: inline-flex; align-items: center; gap: 3px; line-height: 1.5; height: 20px;">
+            ${escapeHtml(tag)}
+            <button class="remove-custom-tag" data-tag="${escapeHtml(tag)}" style="background: transparent; border: none; font-size: 0.6rem; color: #8e8e93; cursor: pointer; padding: 0;">✕</button>
+        </span>
+    `).join('');
+    
+    document.querySelectorAll('.remove-custom-tag').forEach(btn => { 
+        btn.onclick = (e) => { 
+            e.stopPropagation(); 
+            const tagToRemove = btn.dataset.tag; 
+            sub.customTags = sub.customTags.filter(t => t !== tagToRemove); 
+            renderCustomTags(); 
+        }; 
+    });
+}
+
+
+renderCustomTags();
+
+document.getElementById('editSubAddTagBtn').onclick = () => { 
+    const input = document.getElementById('editSubNewTag'); 
+    const newTag = input.value.trim(); 
+    if(newTag && !sub.customTags.includes(newTag) && newTag !== sub.name) { 
+        sub.customTags.push(newTag); 
+        if(!globalTags.includes(newTag)) { 
+            globalTags.push(newTag); 
+            renderGlobalTags();  // 刷新主页标签显示
+        } 
+        renderCustomTags(); 
+        input.value = ''; 
+    } else if(newTag === sub.name) {
+        alert('不能添加与子分类同名的标签（已自动关联）'); 
+    } 
+};
+
+        const confirmBtn = document.getElementById('editSubConfirmBtn'); const newConfirm = confirmBtn.cloneNode(true); confirmBtn.parentNode.replaceChild(newConfirm, confirmBtn);
+newConfirm.onclick = () => { 
+    const newName = document.getElementById('editSubName').value.trim(); 
+    const newEmoji = document.getElementById('editSubEmoji').value.trim(); 
+    if(newName && newName !== sub.name) { 
+        // 如果改名，需要更新全局标签
+        const oldName = sub.name;
+        if(globalTags.includes(oldName)) {
+            globalTags = globalTags.filter(t => t !== oldName);
+        }
+        if(!globalTags.includes(newName)) {
+            globalTags.push(newName);
+        }
+        sub.name = newName; 
+        document.getElementById('defaultTagDisplay').innerText = newName;
+        
+        // 更新所有句子中的标签引用
+        for(const primary of categories) {
+            for(const s of (primary.children || [])) {
+                if(s.tagsMap) {
+                    for(const idx in s.tagsMap) {
+                        if(s.tagsMap[idx] && s.tagsMap[idx].includes(oldName)) {
+                            s.tagsMap[idx] = s.tagsMap[idx].map(t => t === oldName ? newName : t);
+                        }
+                    }
+                }
+            }
+        }
+    } 
+    if(newEmoji) sub.emoji = newEmoji; 
+    saveData(); 
+    renderCategoryManageList(); 
+    renderMain(); 
+    renderGlobalTags(); 
+    dialog.classList.remove('active'); 
+    currentEditSubData = null; 
+};
+
+
+        const deleteBtn = document.getElementById('editSubDeleteBtn'); const newDelete = deleteBtn.cloneNode(true); deleteBtn.parentNode.replaceChild(newDelete, deleteBtn);
+        newDelete.onclick = () => { if(confirm(`确定删除子分类“${sub.name}”及其所有内容吗？`)) { const cat = categories.find(c => c.id === catId); if(cat) { cat.children = cat.children.filter(s => s.id !== subId); saveData(); renderCategoryManageList(); renderMain(); renderGlobalTags(); if(currentPageRef && currentPageRef.type === 'category' && currentPageRef.secId === subId) document.getElementById('sentencePage').classList.remove('open'); dialog.classList.remove('active'); currentEditSubData = null; } } };
+        const cancelBtn = document.getElementById('editSubCancelBtn'); const newCancel = cancelBtn.cloneNode(true); cancelBtn.parentNode.replaceChild(newCancel, cancelBtn);
+        newCancel.onclick = () => { dialog.classList.remove('active'); currentEditSubData = null; };
+        dialog.classList.add('active');
+    }
+
+    document.getElementById('batchAddBtn')?.addEventListener('click',()=>{ document.getElementById('batchAddTextarea').value=''; document.getElementById('batchAddDialog').classList.add('active'); });
+    document.getElementById('batchAddCancelBtn')?.addEventListener('click',()=>{ document.getElementById('batchAddDialog').classList.remove('active'); });
+    
+document.getElementById('batchAddConfirmBtn')?.addEventListener('click', () => { 
+    const val = document.getElementById('batchAddTextarea').value; 
+    if(!val.trim()) return; 
+    const lines = val.split(/\r?\n/).filter(l => l.trim().length); 
+    if(lines.length === 0) return; 
+    
+    if(!currentPageRef || currentPageRef.type !== 'category') { 
+        alert('请先打开子分类'); 
+        return; 
+    } 
+    
+    const primary = categories.find(p => p.id === currentPageRef.primaryId); 
+    if(primary) { 
+        const sec = primary.children.find(c => c.id === currentPageRef.secId); 
+        if(sec) { 
+            const arr = currentListType === 'good' ? sec.goodSentences : sec.wordSentences; 
+            // 获取默认标签：当前子分类的名称
+            const defaultTag = sec.name;
+            
+            // 确保默认标签存在于全局标签中
+            if(!globalTags.includes(defaultTag)) {
+                globalTags.push(defaultTag);
+            }
+            
+            lines.forEach(l => {
+                const trimmedLine = l.trim();
+                if(trimmedLine) {
+                    arr.push(trimmedLine);
+                    if(!sec.tagsMap) sec.tagsMap = {};
+                    // 使用默认标签作为新句子的标签
+                    sec.tagsMap[arr.length - 1] = [defaultTag];
+                }
+            }); 
+            
+            saveData(); 
+            updateSentencePageByType(); 
+            renderMain();
+            renderGlobalTags();
+        } 
+    } 
+    document.getElementById('batchAddDialog').classList.remove('active'); 
+});
+
+
+document.getElementById('dialogSaveBtn').onclick = () => { 
+    const newText = document.getElementById('dialogSentenceText').value.trim(); 
+    if(!newText) return;
+    
+    // 获取用户当前选择的标签（已删除/添加后的结果）
+    let newTags = [...(currentDialogContext.tags || [])];
+    
+    const oldListType = currentDialogContext.listType;
+    const sentenceText = currentDialogContext.sentenceText; // 原文本用于删除
+    const isGoodType = oldListType === 'good';
+    
+    // ===== 第一步：从原分类中删除这个句子 =====
+    const oldPrimary = categories.find(p => p.id === currentDialogContext.primaryId);
+    const oldSec = oldPrimary?.children.find(s => s.id === currentDialogContext.secId);
+    if(oldSec) {
+        const arr = isGoodType ? oldSec.goodSentences : oldSec.wordSentences;
+        const idx = arr.indexOf(sentenceText);
+        if(idx !== -1) {
+            arr.splice(idx, 1);
+            if(oldSec.tagsMap) {
+                delete oldSec.tagsMap[idx];
+                // 重建 tagsMap 索引
+                const newMap = {};
+                arr.forEach((_, newIdx) => {
+                    const oldKey = Object.keys(oldSec.tagsMap || {}).find(k => parseInt(k) === newIdx);
+                    if(oldKey !== undefined) newMap[newIdx] = oldSec.tagsMap[oldKey];
+                    else if(oldSec.tagsMap[newIdx + 1] !== undefined) newMap[newIdx] = oldSec.tagsMap[newIdx + 1];
+                });
+                oldSec.tagsMap = newMap;
+            }
+        }
+    }
+    
+    // ===== 第二步：确保有一个"未分类"的默认分类 =====
+    let uncategorizedPrimary = categories.find(p => p.name === "未分类");
+    if(!uncategorizedPrimary) {
+        uncategorizedPrimary = {
+            id: genId(),
+            name: "未分类",
+            emoji: "📂",
+            collapsed: false,
+            children: [{
+                id: genId(),
+                name: "未分类",
+                emoji: "📄",
+                goodSentences: [],
+                wordSentences: [],
+                tagsMap: {},
+                customTags: []
+            }]
+        };
+        categories.push(uncategorizedPrimary);
+    }
+    let uncategorizedSub = uncategorizedPrimary.children[0];
+    
+    // ===== 第三步：过滤掉子分类名称标签 =====
+    const allSubNames = new Set();
+    for(const primary of categories) {
+        for(const sub of (primary.children || [])) {
+            allSubNames.add(sub.name);
+        }
+    }
+    
+    // 用户标签中，哪些是子分类名称
+    const matchedSubNames = newTags.filter(tag => allSubNames.has(tag));
+    // 剩余的自定义标签
+    const customTagsOnly = newTags.filter(tag => !allSubNames.has(tag));
+    
+    // 决定句子应该放到哪些分类
+    let targetSubs = [];
+    if(matchedSubNames.length > 0) {
+        for(const primary of categories) {
+            for(const sub of (primary.children || [])) {
+                if(matchedSubNames.includes(sub.name)) {
+                    targetSubs.push(sub);
+                }
+            }
+        }
+    } else {
+        targetSubs = [uncategorizedSub];
+    }
+    
+    // ===== 第四步：添加到目标分类 =====
+    const addedKeys = new Set();
+    for(const sub of targetSubs) {
+        const arr = isGoodType ? sub.goodSentences : sub.wordSentences;
+        const key = `${sub.id}_${isGoodType ? 'good' : 'word'}`;
+        
+        if(!addedKeys.has(key) && !arr.includes(newText)) {
+            arr.push(newText);
+            if(!sub.tagsMap) sub.tagsMap = {};
+            // 保存标签：匹配的分类名 + 自定义标签
+            const tagsToStore = [...matchedSubNames, ...customTagsOnly];
+            sub.tagsMap[arr.length - 1] = tagsToStore;
+            addedKeys.add(key);
+        }
+    }
+    
+    // 如果目标分类是"未分类"，确保标签正确
+    if(targetSubs[0] === uncategorizedSub && uncategorizedSub.tagsMap) {
+        const arr = isGoodType ? uncategorizedSub.goodSentences : uncategorizedSub.wordSentences;
+        const idx = arr.indexOf(newText);
+        if(idx !== -1) {
+            uncategorizedSub.tagsMap[idx] = [...customTagsOnly];
+        }
+    }
+    
+    saveData();
+    
+    // 刷新页面
+    if(currentPageRef && currentPageRef.type === 'category') {
+        const primary = categories.find(p => p.id === currentPageRef.primaryId);
+        const sec = primary?.children.find(s => s.id === currentPageRef.secId);
+        if(sec) {
+            currentPageRef.goodSentences = sec.goodSentences;
+            currentPageRef.wordSentences = sec.wordSentences;
+            currentPageRef.tagsMap = sec.tagsMap;
+            updateSentencePageByType();
+        }
+    } else if(currentPageRef && currentPageRef.type === 'tag') {
+        // 如果是从标签页编辑的，关闭页面
+        document.getElementById('sentencePage').classList.remove('open');
+        currentPageRef = null;
+    }
+    renderMain();
+    renderGlobalTags();
+    
+    document.getElementById('sentenceDialog').classList.remove('active');
+};
+
+
+document.getElementById('dialogDeleteBtn').onclick=()=>{ if(confirm('删除？')){ const p=categories.find(p=>p.id===currentDialogContext.primaryId); const sec=p?.children.find(s=>s.id===currentDialogContext.secId); if(sec){ const arr=currentDialogContext.listType==='good'?sec.goodSentences:sec.wordSentences; arr.splice(currentDialogContext.sentenceIndex,1); if(sec.tagsMap) delete sec.tagsMap[currentDialogContext.sentenceIndex]; saveData(); updateSentencePageByType(); renderMain(); } document.getElementById('sentenceDialog').classList.remove('active'); } };
+    document.getElementById('dialogCloseBtn').onclick=()=>document.getElementById('sentenceDialog').classList.remove('active');
+
+document.getElementById('dialogAddTagBtn').onclick = () => { 
+    const input = document.getElementById('dialogNewTagInput'); 
+    const tag = input.value.trim(); 
+    if(tag) {
+        if(!currentDialogContext.tags) currentDialogContext.tags = [];
+        if(!currentDialogContext.tags.includes(tag)) {
+            currentDialogContext.tags.push(tag);
+            if(!globalTags.includes(tag)) {
+                globalTags.push(tag);
+            }
+            renderDialogTags();
+            renderGlobalTags();
+            input.value = '';
+        }
+    } 
+};
+  document.getElementById('pageAddSentenceBtn').onclick = () => { 
+    const inp = document.getElementById('pageSentenceInput'); 
+    const text = inp.value.trim(); 
+    if(!text || currentPageRef?.type !== 'category') return; 
+    const p = categories.find(p => p.id === currentPageRef.primaryId); 
+    const sec = p?.children.find(s => s.id === currentPageRef.secId); 
+    if(sec){ 
+        const arr = currentListType === 'good' ? sec.goodSentences : sec.wordSentences; 
+        arr.push(text); 
+        
+        if(!sec.tagsMap) sec.tagsMap = {};
+        // 【关键修改】默认标签：当前子分类的名称
+        const defaultTag = sec.name;
+        const initialTags = [defaultTag];
+        
+        // 同时确保默认标签存在于全局标签中
+        if(!globalTags.includes(defaultTag)) {
+            globalTags.push(defaultTag);
+        }
+        
+        sec.tagsMap[arr.length - 1] = initialTags;
+        
+        saveData(); 
+        updateSentencePageByType(); 
+        inp.value = ''; 
+        renderMain(); 
+        renderGlobalTags();
+    } 
+};
+    
+    document.querySelectorAll('.type-btn').forEach(btn=>btn.addEventListener('click',()=>{ document.querySelectorAll('.type-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); currentListType=btn.dataset.type; if(currentPageRef?.type==='category')updateSentencePageByType(); }));
+    document.getElementById('closePageBtn').onclick=()=>{ document.getElementById('sentencePage').classList.remove('open'); currentPageRef=null; };
+    document.getElementById('printPageBtn').onclick=()=>window.print();
+    document.getElementById('addTagBtn').onclick=()=>{ const inp=document.getElementById('newTagInput'); const tag=inp.value.trim(); if(tag&&!globalTags.includes(tag)){ globalTags.push(tag); saveData(); renderGlobalTags(); inp.value=''; } };
+    let categoryCollapsed=false,tagCollapsed=false;
+    document.getElementById('categorySectionHeader').onclick=()=>{ categoryCollapsed=!categoryCollapsed; document.getElementById('categorySectionContent').style.display=categoryCollapsed?'none':'block'; document.getElementById('categoryToggleIcon').innerText=categoryCollapsed?'▶':'▼'; };
+    document.getElementById('tagSectionHeader').onclick=()=>{ tagCollapsed=!tagCollapsed; document.getElementById('tagSectionContent').style.display=tagCollapsed?'none':'block'; document.getElementById('tagToggleIcon').innerText=tagCollapsed?'▶':'▼'; };
+    document.getElementById('manageCategoryBtn').onclick=()=>{ renderCategoryManageList(); document.getElementById('categoryManageDialog').classList.add('active'); };
+    document.getElementById('closeManageDialogBtn').onclick=()=>document.getElementById('categoryManageDialog').classList.remove('active');
+    document.getElementById('doAddCategoryBtn').onclick=()=>{ const name=document.getElementById('newCatName').value.trim(); if(name){ categories.push({id:genId(),name:name,emoji:'📁',collapsed:true,children:[], customTags:[]}); saveData(); renderCategoryManageList(); renderMain(); document.getElementById('newCatName').value=''; } };
+    const settingsModal=document.getElementById('settingsModal');
+    document.getElementById('settingsBtn').onclick=()=>settingsModal.classList.add('active');
+    document.getElementById('closeSettings').onclick=()=>settingsModal.classList.remove('active');
+
+async function syncToGist() { 
+    const token = document.getElementById('gistToken').value.trim(); 
+    let gid = document.getElementById('gistId').value.trim(); 
+    const syncBtn = document.getElementById('syncToGist');
+    const restoreBtn = document.getElementById('restoreFromGist');
+    const statusDiv = document.getElementById('syncStatus');
+    
+    if(!token) { 
+        statusDiv.innerText = '❌ 需要输入 GitHub Token'; 
+        return; 
+    } 
+    
+    // 保存当前按钮文字，设置为禁用状态
+    const originalText = syncBtn.innerHTML;
+    syncBtn.innerHTML = '⏳ 上传中...';
+    syncBtn.disabled = true;
+    syncBtn.style.opacity = '0.6';
+    if(restoreBtn) {
+        restoreBtn.disabled = true;
+        restoreBtn.style.opacity = '0.6';
+    }
+    statusDiv.innerText = '☁️ 正在上传备份...';
+    
+    try { 
+        let url = 'https://api.github.com/gists'; 
+        let method = 'POST'; 
+        if(gid) { 
+            url += `/${gid}`; 
+            method = 'PATCH'; 
+        } 
+        const res = await fetch(url, {
+            method, 
+            headers: {
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({
+                description: '拾句集', 
+                public: false, 
+                files: {
+                    'backup.json': {
+                        content: JSON.stringify({ categories, globalTags })
+                    }
+                }
+            })
+        }); 
+        
+        if(res.ok) { 
+            const json = await res.json(); 
+            if(!gid) {
+                document.getElementById('gistId').value = json.id;
+                saveGistSettings();  // 自动保存新生成的 Gist ID
+            } 
+            statusDiv.innerText = '✅ 备份成功！'; 
+        } else {
+            const error = await res.text();
+            statusDiv.innerText = `❌ 备份失败: ${res.status}`;
+            console.error('Gist upload error:', error);
+        } 
+    } catch(e) { 
+        statusDiv.innerText = '❌ 网络错误，请重试'; 
+        console.error(e);
+    } finally {
+        // 恢复按钮状态
+        syncBtn.innerHTML = originalText;
+        syncBtn.disabled = false;
+        syncBtn.style.opacity = '1';
+        if(restoreBtn) {
+            restoreBtn.disabled = false;
+            restoreBtn.style.opacity = '1';
+        }
+        // 3秒后清除状态消息（保留成功/失败图标）
+        setTimeout(() => {
+            if(statusDiv.innerText.includes('成功') || statusDiv.innerText.includes('失败') || statusDiv.innerText.includes('错误')) {
+                statusDiv.innerText = '';
+            }
+        }, 3000);
+    } 
+}
+
+
+async function restoreFromGist() { 
+    const token = document.getElementById('gistToken').value.trim(); 
+    const gid = document.getElementById('gistId').value.trim(); 
+    const syncBtn = document.getElementById('syncToGist');
+    const restoreBtn = document.getElementById('restoreFromGist');
+    const statusDiv = document.getElementById('syncStatus');
+    
+    if(!token || !gid) { 
+        statusDiv.innerText = '❌ 需要填写 Token 和 Gist ID'; 
+        return; 
+    } 
+    
+    // 设置按钮为禁用状态
+    const originalText = restoreBtn.innerHTML;
+    restoreBtn.innerHTML = '⏳ 恢复中...';
+    restoreBtn.disabled = true;
+    restoreBtn.style.opacity = '0.6';
+    if(syncBtn) {
+        syncBtn.disabled = true;
+        syncBtn.style.opacity = '0.6';
+    }
+    statusDiv.innerText = '☁️ 正在从云端恢复...';
+    
+    try { 
+        const res = await fetch(`https://api.github.com/gists/${gid}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        }); 
+        
+        if(res.ok) { 
+            const json = await res.json(); 
+            const content = json.files['backup.json']?.content; 
+            if(content) { 
+                const data = JSON.parse(content); 
+                if(data) { 
+                    categories = data.categories; 
+                    globalTags = data.globalTags || []; 
+                    categories.forEach(c => c.children?.forEach(ensureArrays)); 
+                    saveData(); 
+                    renderMain(); 
+                    renderGlobalTags(); 
+                    // 如果当前有打开的分类页面，刷新
+                    if(currentPageRef && currentPageRef.type === 'category') {
+                        const primary = categories.find(p => p.id === currentPageRef.primaryId);
+                        const sec = primary?.children.find(s => s.id === currentPageRef.secId);
+                        if(sec) {
+                            currentPageRef.goodSentences = sec.goodSentences;
+                            currentPageRef.wordSentences = sec.wordSentences;
+                            currentPageRef.tagsMap = sec.tagsMap;
+                            updateSentencePageByType();
+                        } else {
+                            document.getElementById('sentencePage').classList.remove('open');
+                            currentPageRef = null;
+                        }
+                    }
+                    statusDiv.innerText = '✅ 恢复成功！'; 
+                } else {
+                    statusDiv.innerText = '❌ 备份文件格式错误'; 
+                }
+            } else {
+                statusDiv.innerText = '❌ 未找到 backup.json 文件'; 
+            }
+        } else {
+            statusDiv.innerText = `❌ 恢复失败: ${res.status}`; 
+        } 
+    } catch(e) { 
+        statusDiv.innerText = '❌ 网络错误，请重试'; 
+        console.error(e);
+    } finally {
+        // 恢复按钮状态
+        restoreBtn.innerHTML = originalText;
+        restoreBtn.disabled = false;
+        restoreBtn.style.opacity = '1';
+        if(syncBtn) {
+            syncBtn.disabled = false;
+            syncBtn.style.opacity = '1';
+        }
+        // 3秒后清除状态消息
+        setTimeout(() => {
+            if(statusDiv.innerText.includes('成功') || statusDiv.innerText.includes('失败') || statusDiv.innerText.includes('错误')) {
+                statusDiv.innerText = '';
+            }
+        }, 3000);
+    } 
+}
+
+
+    document.getElementById('syncToGist').onclick=syncToGist;
+    document.getElementById('restoreFromGist').onclick=restoreFromGist;
+    
+    // 同步所有句子：根据句子已有的标签，自动将其添加到匹配的子分类中
+function syncAllSentencesToMatchingSubs() {
+    let changed = false;
+    
+    // 遍历所有子分类
+    for(const primary of categories) {
+        for(const sub of (primary.children || [])) {
+            const defaultTag = sub.name;
+            const extraTags = sub.customTags || [];
+            const allRelatedTags = [defaultTag, ...extraTags];
+            
+            // 遍历所有其他子分类中的句子，检查是否带有相关标签
+            for(const otherPrimary of categories) {
+                for(const otherSub of (otherPrimary.children || [])) {
+                    if(otherSub === sub) continue; // 跳过自身
+                    
+                    const tagsMap = otherSub.tagsMap || {};
+                    for(let idx = 0; idx < (otherSub.goodSentences || []).length; idx++) {
+                        const sentence = otherSub.goodSentences[idx];
+                        const tags = tagsMap[idx] || [];
+                        const hasMatchingTag = tags.some(t => allRelatedTags.includes(t));
+                        
+                        if(hasMatchingTag && sentence && !sub.goodSentences.includes(sentence)) {
+                            sub.goodSentences.push(sentence);
+                            if(!sub.tagsMap) sub.tagsMap = {};
+                            sub.tagsMap[sub.goodSentences.length - 1] = tags;
+                            changed = true;
+                        }
+                    }
+                    
+                    for(let idx = 0; idx < (otherSub.wordSentences || []).length; idx++) {
+                        const sentence = otherSub.wordSentences[idx];
+                        const tags = tagsMap[idx] || [];
+                        const hasMatchingTag = tags.some(t => allRelatedTags.includes(t));
+                        
+                        if(hasMatchingTag && sentence && !sub.wordSentences.includes(sentence)) {
+                            sub.wordSentences.push(sentence);
+                            if(!sub.tagsMap) sub.tagsMap = {};
+                            sub.tagsMap[sub.wordSentences.length - 1] = tags;
+                            changed = true;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    
+    if(changed) {
+        saveData();
+        renderMain();
+        console.log('同步完成，句子已自动归类');
+    }
+}
+
+// 在 loadData 后调用一次，处理已有数据
+// 取消注释下面这行即可启用
+// setTimeout(() => syncAllSentencesToMatchingSubs(), 500);
+    
+    
+
+// 打开标签管理弹窗
+document.getElementById('manageTagsBtn')?.addEventListener('click', () => {
+    renderTagsManageList();
+    document.getElementById('tagsManageDialog').classList.add('active');
+});
+
+// 关闭标签管理弹窗
+document.getElementById('closeTagsManageBtn')?.addEventListener('click', () => {
+    document.getElementById('tagsManageDialog').classList.remove('active');
+});
+
+function renderTagsManageList() {
+    const container = document.getElementById('tagsManageList');
+    if(!container) return;
+    
+    // 过滤掉子分类名称（默认标签不显示在这里）
+    const defaultTagNames = new Set();
+    for(const primary of categories) {
+        for(const sub of (primary.children || [])) {
+            if(sub.name) defaultTagNames.add(sub.name);
+        }
+    }
+    const displayTags = globalTags.filter(tag => !defaultTagNames.has(tag));
+    
+    if(displayTags.length === 0) {
+        container.innerHTML = '<div style="padding: 20px; text-align: center; color: #8e8e93;">暂无自定义标签</div>';
+        return;
+    }
+    
+    // 样式与主页 .tag-item 完全一致：padding: 3px 11px, border-radius: 6px, font-size: 0.8rem
+    container.innerHTML = displayTags.map(tag => `
+        <div class="tag-manage-item" style="background: #e9e9ef; padding: 3px 11px; border-radius: 6px; font-size: 0.8rem; display: inline-flex; align-items: center; gap: 8px; line-height: 1.4;">
+            <span>#${escapeHtml(tag)}</span>
+            <button class="delete-tag-btn" data-tag="${escapeHtml(tag)}" style="background: transparent; border: none; font-size: 0.7rem; color: #8e8e93; cursor: pointer; padding: 0; margin-left: 4px;">✕</button>
+        </div>
+    `).join('');
+    
+    // 绑定删除事件
+    document.querySelectorAll('.delete-tag-btn').forEach(btn => {
+        btn.onclick = (e) => {
+            e.stopPropagation();
+            const tag = btn.dataset.tag;
+            if(confirm(`确定删除标签“${tag}”吗？\n（仅删除标签本身，包含该标签的句子不会丢失）`)) {
+                globalTags = globalTags.filter(t => t !== tag);
+                for(const primary of categories) {
+                    for(const sub of (primary.children || [])) {
+                        if(sub.tagsMap) {
+                            for(const idx in sub.tagsMap) {
+                                if(sub.tagsMap[idx] && sub.tagsMap[idx].includes(tag)) {
+                                    sub.tagsMap[idx] = sub.tagsMap[idx].filter(t => t !== tag);
+                                }
+                            }
+                        }
+                    }
+                }
+                saveData();
+                renderTagsManageList();
+                renderGlobalTags();
+                renderMain();
+            }
+        };
+    });
+}
+// 添加新标签
+document.getElementById('addGlobalTagBtn')?.addEventListener('click', () => {
+    const input = document.getElementById('newGlobalTagInput');
+    const newTag = input.value.trim();
+    if(newTag && !globalTags.includes(newTag)) {
+        // 检查是否是子分类名称
+        let isDefaultTag = false;
+        for(const primary of categories) {
+            for(const sub of (primary.children || [])) {
+                if(sub.name === newTag) isDefaultTag = true;
+            }
+        }
+        if(isDefaultTag) {
+            alert('该标签与子分类名称重复，无需手动添加');
+            input.value = '';
+            return;
+        }
+        globalTags.push(newTag);
+        saveData();
+        renderTagsManageList();
+        renderGlobalTags();
+        input.value = '';
+    } else if(globalTags.includes(newTag)) {
+        alert('标签已存在');
+    }
+});
+
+// 点击弹窗背景关闭
+document.getElementById('tagsManageDialog')?.addEventListener('click', (e) => {
+    if(e.target === document.getElementById('tagsManageDialog')) {
+        document.getElementById('tagsManageDialog').classList.remove('active');
+    }
+});
+
+    loadData();
+
+
+// Token 显示/隐藏切换功能 - 使用锁/开锁图标
+const tokenInputElem = document.getElementById('gistToken');
+const toggleBtn = document.getElementById('toggleTokenVisibility');
+
+if(tokenInputElem && toggleBtn) {
+    const lockIconSvg = toggleBtn.querySelector('svg');
+    const lockPath = lockIconSvg ? lockIconSvg.querySelector('path') : null;
+    
+    // 保存原始路径（锁定状态）
+    const lockedPath = "M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z";
+    // 开锁状态路径
+    const unlockedPath = "M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10A2,2 0 0,1 6,8H15V6A3,3 0 0,0 12,3A3,3 0 0,0 9,6H7A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,17A2,2 0 0,1 10,15A2,2 0 0,1 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17Z";
+    
+    toggleBtn.addEventListener('click', function() {
+        const isPassword = tokenInputElem.getAttribute('type') === 'password';
+        tokenInputElem.setAttribute('type', isPassword ? 'text' : 'password');
+        
+        // 切换图标：锁定状态显示锁，显示密码时显示开锁
+        if(lockPath) {
+            lockPath.setAttribute('d', isPassword ? unlockedPath : lockedPath);
+        }
+    });
+}
+    
+// ========== Gist 配置自动保存 ==========
+function loadGistSettings() {
+    const savedToken = localStorage.getItem(PAGE_ID + '_gist_token');
+    const savedGistId = localStorage.getItem(PAGE_ID + '_gist_id');
+    const tokenField = document.getElementById('gistToken');
+    const gistIdField = document.getElementById('gistId');
+    if(tokenField && savedToken) tokenField.value = savedToken;
+    if(gistIdField && savedGistId) gistIdField.value = savedGistId;
+}
+
+function saveGistSettings() {
+    const tokenField = document.getElementById('gistToken');
+    const gistIdField = document.getElementById('gistId');
+    const token = tokenField ? tokenField.value.trim() : '';
+    const gistId = gistIdField ? gistIdField.value.trim() : '';
+    if(token) localStorage.setItem(PAGE_ID + '_gist_token', token);
+    else localStorage.removeItem(PAGE_ID + '_gist_token');
+    if(gistId) localStorage.setItem(PAGE_ID + '_gist_id', gistId);
+    else localStorage.removeItem(PAGE_ID + '_gist_id');
+}
+
+// 绑定自动保存事件
+const gistTokenField = document.getElementById('gistToken');
+const gistIdField = document.getElementById('gistId');
+if(gistTokenField) gistTokenField.addEventListener('input', saveGistSettings);
+if(gistIdField) gistIdField.addEventListener('input', saveGistSettings);
+
+// 加载已保存的配置
+loadGistSettings();
+
+</script>
+</body>
+</html>
