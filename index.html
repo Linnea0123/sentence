@@ -945,8 +945,69 @@ const PAGE_ID = 'shiju_main';  // 拾句主网页
     ];
 
     function initDefault() { categories = JSON.parse(JSON.stringify(defaultRaw)); globalTags = ["生活", "哲思"]; categories.forEach(c => c.children?.forEach(ensureArrays)); }
-    function saveData() { localStorage.setItem('quote_hub_ios', JSON.stringify({ categories, globalTags })); updateCategoryCount(); }
-    function updateCategoryCount() { const span = document.getElementById('categoryCount'); if(span) span.innerText = categories.length; }
+    // 在文件开头（约第 600 行）添加防抖定时器变量
+let syncTimer = null;
+
+function saveData() { 
+    localStorage.setItem('quote_hub_ios', JSON.stringify({ categories, globalTags })); 
+    updateCategoryCount();
+    
+    // ========== 静默同步（5秒防抖）==========
+    if (syncTimer) clearTimeout(syncTimer);
+    syncTimer = setTimeout(() => {
+        const token = localStorage.getItem(PAGE_ID + '_gist_token');
+        const gistId = localStorage.getItem(PAGE_ID + '_gist_id');
+        if (token && gistId) {
+            console.log('🔄 静默同步中...');
+            silentSyncToGist(token, gistId);
+        }
+    }, 5000);
+}
+  
+
+// 静默同步函数（不弹窗，不显示loading）
+async function silentSyncToGist(token, gistId) {
+    try {
+        let url = 'https://api.github.com/gists';
+        let method = 'POST';
+        if(gistId) { 
+            url += `/${gistId}`; 
+            method = 'PATCH'; 
+        }
+        
+        const res = await fetch(url, {
+            method, 
+            headers: {
+                'Authorization': `Bearer ${token}`, 
+                'Content-Type': 'application/json'
+            }, 
+            body: JSON.stringify({
+                description: '拾句集', 
+                public: false, 
+                files: {
+                    'backup.json': {
+                        content: JSON.stringify({ categories, globalTags })
+                    }
+                }
+            })
+        });
+        
+        if(res.ok) {
+            console.log('✅ 静默同步成功');
+            const json = await res.json();
+            if(!gistId && json.id) {
+                localStorage.setItem(PAGE_ID + '_gist_id', json.id);
+                const gistIdField = document.getElementById('gistId');
+                if(gistIdField) gistIdField.value = json.id;
+            }
+        } else {
+            console.log('❌ 静默同步失败:', res.status);
+        }
+    } catch(e) {
+        console.log('❌ 静默同步网络错误:', e);
+    }
+}
+function updateCategoryCount() { const span = document.getElementById('categoryCount'); if(span) span.innerText = categories.length; }
     function escapeHtml(str) { if(!str) return ''; return str.replace(/[&<>]/g, m=> m==='&'?'&amp;':m==='<'?'&lt;':'&gt;'); }
     function splitIntoColumns(arr) { const left=[], right=[]; arr.forEach((item,idx)=>{ if(idx%2===0) left.push(item); else right.push(item); }); return {left,right}; }
 
@@ -1692,6 +1753,7 @@ document.getElementById('dialogAddTagBtn').onclick = () => {
     document.getElementById('closeSettings').onclick=()=>settingsModal.classList.remove('active');
 
 async function syncToGist() { 
+     if (syncTimer) clearTimeout(syncTimer);
     const token = document.getElementById('gistToken').value.trim(); 
     let gid = document.getElementById('gistId').value.trim(); 
     const syncBtn = document.getElementById('syncToGist');
