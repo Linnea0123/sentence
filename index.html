@@ -868,37 +868,41 @@
     <div class="dialog-content" style="max-width: 360px; padding: 24px; border-radius: 28px;">
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <h3 style="font-size: 1.2rem; font-weight: 600; color: #1c1c1e;">☁️ 云端同步</h3>
-            <button id="closeSettings" style="background: transparent; border: none; font-size: 1.2rem; color: #8e8e93; cursor: pointer; width: 32px; height: 32px; border-radius: 20px;">✕</button>
+            <button id="closeSettings" style="background: transparent; border: none; font-size: 1.2rem; color: #8e8e93; cursor: pointer;">✕</button>
         </div>
-        <p style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 20px; line-height: 1.4;">使用 GitHub Gist 备份和恢复数据</p>
         
-<div style="margin-bottom: 16px;">
-    <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px;">GitHub Token</div>
-    <div style="display: flex; gap: 8px; align-items: center;">
-        <input type="password" id="gistToken" placeholder="ghp_xxxxxxxxxxxx" style="flex:1; padding: 12px; border: 0.5px solid #e2e2e6; border-radius: 14px; font-size: 0.85rem; background: #f8f8fa;">
+        <!-- Token 输入 -->
+        <div style="margin-bottom: 16px;">
+            <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px;">GitHub Token</div>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <input type="password" id="gistToken" placeholder="ghp_xxxxxxxxxxxx" style="flex:1; padding: 12px; border-radius: 14px; border: 0.5px solid #e2e2e6; background: #f8f8fa;">
+                <button type="button" id="toggleTokenVisibility" style="background: transparent; border: none; width: 40px; height: 40px; border-radius: 20px; cursor: pointer;">👁️</button>
+            </div>
+        </div>
 
-<button type="button" id="toggleTokenVisibility" style="background: transparent; border: none; width: 40px; height: 40px; border-radius: 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: #8e8e93;">
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12,17C10.89,17 10,16.1 10,15C10,13.89 10.89,13 12,13A2,2 0 0,1 14,15A2,2 0 0,1 12,17M18,20V10H6V20H18M18,8A2,2 0 0,1 20,10V20A2,2 0 0,1 18,22H6C4.89,22 4,21.1 4,20V10C4,8.89 4.89,8 6,8H7V6A5,5 0 0,1 12,1A5,5 0 0,1 17,6V8H18M12,3A3,3 0 0,0 9,6V8H15V6A3,3 0 0,0 12,3Z"/>
-    </svg>
-</button>
-
-    </div>
-</div>
-
-
+        <!-- Gist ID 输入 -->
         <div style="margin-bottom: 20px;">
             <div style="font-size: 0.75rem; color: #8e8e93; margin-bottom: 6px;">Gist ID</div>
-            <input type="text" id="gistId" placeholder="xxxxxxxxxxxx" style="width:100%; padding: 12px; border: 0.5px solid #e2e2e6; border-radius: 14px; font-size: 0.85rem; background: #f8f8fa;">
+            <input type="text" id="gistId" placeholder="xxxxxxxxxxxx" style="width:100%; padding: 12px; border-radius: 14px; border: 0.5px solid #e2e2e6; background: #f8f8fa;">
         </div>
+
+        <!-- ========== 新增：保存设置按钮 ========== -->
+        <div style="margin-bottom: 16px;">
+            <button id="saveGistSettingsBtn" style="width: 100%; background: #34c759; border: none; padding: 10px; border-radius: 30px; font-size: 0.85rem; color: white; font-weight: 500; cursor: pointer;">
+                💾 保存设置
+            </button>
+            <div style="font-size: 0.65rem; color: #8e8e93; text-align: center; margin-top: 6px;">保存后即可使用自动备份/恢复</div>
+        </div>
+
+        <!-- 同步按钮组 -->
         <div style="display: flex; gap: 12px; margin-bottom: 16px;">
             <button id="syncToGist" style="flex: 1; background: #007aff; border: none; padding: 12px; border-radius: 30px; font-size: 0.85rem; color: white; font-weight: 500; cursor: pointer;">☁️ 上传备份</button>
             <button id="restoreFromGist" style="flex: 1; background: #e9e9ef; border: none; padding: 12px; border-radius: 30px; font-size: 0.85rem; color: #007aff; font-weight: 500; cursor: pointer;">⬇️ 恢复云端</button>
         </div>
+        
         <div id="syncStatus" style="font-size: 0.7rem; color: #8e8e93; text-align: center; padding: 8px; background: #f8f8fa; border-radius: 12px;"></div>
     </div>
 </div>
-
 
 <div id="tagsManageDialog" class="sentence-dialog">
     <div class="dialog-content" style="position: relative; max-width: 400px;">
@@ -1038,8 +1042,232 @@ function updateCategoryCount() { const span = document.getElementById('categoryC
     
     // 【新增】迁移现有数据，给所有句子添加默认分类标签
     migrateAddDefaultTags();
+    autoMergeFromCloudOncePerDay();
 }
 
+
+
+// ========== 每日首次打开自动从云端合并（不覆盖本地，智能合并）==========
+const LAST_SYNC_DATE_KEY = PAGE_ID + '_last_auto_sync_date';
+
+// 智能合并：将云端数据合并到本地（本地优先，不丢失任何数据）
+function smartMergeWithCloud(cloudCategories, cloudGlobalTags) {
+    if(!cloudCategories || !cloudCategories.length) return false;
+    
+    let changed = false;
+    
+    // 1. 合并全局标签（取并集）
+    for(const tag of cloudGlobalTags || []) {
+        if(!globalTags.includes(tag)) {
+            globalTags.push(tag);
+            changed = true;
+        }
+    }
+    
+    // 2. 构建本地分类/子分类的快速索引
+    const localSubMap = new Map(); // key: "primaryName|subName" -> {primary, sub}
+    for(const primary of categories) {
+        for(const sub of (primary.children || [])) {
+            const key = `${primary.name}|${sub.name}`;
+            localSubMap.set(key, { primary, sub });
+        }
+    }
+    
+    // 3. 遍历云端数据，合并到本地
+    for(const cloudPrimary of cloudCategories) {
+        for(const cloudSub of (cloudPrimary.children || [])) {
+            const key = `${cloudPrimary.name}|${cloudSub.name}`;
+            const localMatch = localSubMap.get(key);
+            
+            if(localMatch) {
+                // 子分类存在：合并句子（去重）
+                const localSub = localMatch.sub;
+                const cloudGood = cloudSub.goodSentences || [];
+                const cloudWord = cloudSub.wordSentences || [];
+                
+                // 合并好句（保留本地顺序，添加云端没有的）
+                for(const sentence of cloudGood) {
+                    if(sentence && !localSub.goodSentences.includes(sentence)) {
+                        localSub.goodSentences.push(sentence);
+                        // 同步标签
+                        if(cloudSub.tagsMap) {
+                            const cloudIdx = cloudGood.indexOf(sentence);
+                            if(cloudIdx !== -1 && cloudSub.tagsMap[cloudIdx]) {
+                                if(!localSub.tagsMap) localSub.tagsMap = {};
+                                const newIdx = localSub.goodSentences.length - 1;
+                                const existingTags = localSub.tagsMap[newIdx] || [];
+                                const newTags = [...new Set([...existingTags, ...cloudSub.tagsMap[cloudIdx]])];
+                                localSub.tagsMap[newIdx] = newTags;
+                            }
+                        }
+                        changed = true;
+                    }
+                }
+                
+                // 合并好词
+                for(const word of cloudWord) {
+                    if(word && !localSub.wordSentences.includes(word)) {
+                        localSub.wordSentences.push(word);
+                        if(cloudSub.tagsMap) {
+                            const cloudIdx = cloudWord.indexOf(word);
+                            if(cloudIdx !== -1 && cloudSub.tagsMap[cloudIdx]) {
+                                if(!localSub.tagsMap) localSub.tagsMap = {};
+                                const newIdx = localSub.wordSentences.length - 1;
+                                const existingTags = localSub.tagsMap[newIdx] || [];
+                                const newTags = [...new Set([...existingTags, ...cloudSub.tagsMap[cloudIdx]])];
+                                localSub.tagsMap[newIdx] = newTags;
+                            }
+                        }
+                        changed = true;
+                    }
+                }
+                
+                // 合并自定义标签
+                if(cloudSub.customTags && cloudSub.customTags.length) {
+                    if(!localSub.customTags) localSub.customTags = [];
+                    for(const ct of cloudSub.customTags) {
+                        if(!localSub.customTags.includes(ct)) {
+                            localSub.customTags.push(ct);
+                            changed = true;
+                        }
+                    }
+                }
+            } else {
+                // 子分类不存在：直接添加整个子分类
+                const newPrimary = categories.find(p => p.name === cloudPrimary.name);
+                if(newPrimary) {
+                    // 主分类存在，添加子分类
+                    if(!newPrimary.children) newPrimary.children = [];
+                    const newSub = JSON.parse(JSON.stringify(cloudSub));
+                    newSub.id = genId();
+                    ensureArrays(newSub);
+                    newPrimary.children.push(newSub);
+                    changed = true;
+                } else {
+                    // 主分类也不存在，添加整个主分类
+                    const newPrimary = JSON.parse(JSON.stringify(cloudPrimary));
+                    newPrimary.id = genId();
+                    newPrimary.collapsed = true;
+                    if(newPrimary.children) {
+                        for(const sub of newPrimary.children) {
+                            sub.id = genId();
+                            ensureArrays(sub);
+                        }
+                    }
+                    categories.push(newPrimary);
+                    changed = true;
+                }
+            }
+        }
+    }
+    
+    return changed;
+}
+
+// 每日首次打开自动合并云端数据
+async function autoMergeFromCloudOncePerDay() {
+    const token = localStorage.getItem(PAGE_ID + '_gist_token');
+    const gistId = localStorage.getItem(PAGE_ID + '_gist_id');
+    
+    // 没有配置云端，直接跳过
+    if(!token || !gistId) {
+        console.log('📭 未配置云端，跳过自动合并');
+        return;
+    }
+    
+    // 检查今天是否已经同步过
+    const today = new Date().toISOString().slice(0, 10); // "2026-06-12"
+    const lastSyncDate = localStorage.getItem(LAST_SYNC_DATE_KEY);
+    
+    if(lastSyncDate === today) {
+        console.log('✅ 今日已自动合并过，跳过');
+        return;
+    }
+    
+    console.log('☁️ 首次打开，开始从云端合并数据...');
+    
+    try {
+        const res = await fetch(`https://api.github.com/gists/${gistId}`, {
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+        
+        if(res.ok) {
+            const json = await res.json();
+            const content = json.files['backup.json']?.content;
+            if(content) {
+                const cloudData = JSON.parse(content);
+                if(cloudData && cloudData.categories) {
+                    // 执行智能合并（本地优先，不覆盖）
+                    const hasChanges = smartMergeWithCloud(cloudData.categories, cloudData.globalTags || []);
+                    
+                    if(hasChanges) {
+                        saveData();
+                        renderMain();
+                        renderGlobalTags();
+                        // 刷新当前打开的页面
+                        if(currentPageRef && currentPageRef.type === 'category') {
+                            const primary = categories.find(p => p.id === currentPageRef.primaryId);
+                            const sec = primary?.children.find(s => s.id === currentPageRef.secId);
+                            if(sec) {
+                                currentPageRef.goodSentences = sec.goodSentences;
+                                currentPageRef.wordSentences = sec.wordSentences;
+                                currentPageRef.tagsMap = sec.tagsMap;
+                                updateSentencePageByType();
+                            }
+                        }
+                        console.log('✅ 自动合并完成，数据已更新');
+                        // 可选：显示一个轻柔的提示（非阻塞）
+                        showToast('🔄 已同步云端最新内容', 2000);
+                    } else {
+                        console.log('📭 云端无新内容，无需合并');
+                    }
+                    
+                    // 记录今日已同步
+                    localStorage.setItem(LAST_SYNC_DATE_KEY, today);
+                }
+            }
+        } else {
+            console.log('❌ 自动合并失败:', res.status);
+        }
+    } catch(e) {
+        console.log('❌ 自动合并网络错误:', e);
+    }
+}
+
+// 轻提示函数（非阻塞）
+let toastTimer = null;
+function showToast(msg, duration = 2000) {
+    let toast = document.getElementById('globalToast');
+    if(!toast) {
+        toast = document.createElement('div');
+        toast.id = 'globalToast';
+        toast.style.cssText = `
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(28,28,30,0.85);
+            backdrop-filter: blur(10px);
+            color: white;
+            padding: 8px 20px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+            z-index: 2000;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            opacity: 0;
+            white-space: nowrap;
+        `;
+        document.body.appendChild(toast);
+    }
+    
+    if(toastTimer) clearTimeout(toastTimer);
+    toast.textContent = msg;
+    toast.style.opacity = '1';
+    toastTimer = setTimeout(() => {
+        toast.style.opacity = '0';
+    }, duration);
+}
 // 迁移函数：给所有已有句子添加其所在子分类名称作为默认标签（放在 loadData 函数后面）
 function migrateAddDefaultTags() {
     let changed = false;
@@ -2113,10 +2341,41 @@ function loadGistSettings() {
     const savedGistId = localStorage.getItem(PAGE_ID + '_gist_id');
     const tokenField = document.getElementById('gistToken');
     const gistIdField = document.getElementById('gistId');
+    
     if(tokenField && savedToken) tokenField.value = savedToken;
-    if(gistIdField && savedGistId) gistIdField.value = savedGistId;
+    
+    // ========== 修改点：设置默认 Gist ID ==========
+    const DEFAULT_GIST_ID = '1236a4215dac8790ccd83c34ffd1a004';
+    
+    if(gistIdField) {
+        if(savedGistId) {
+            gistIdField.value = savedGistId;
+        } else {
+            // 没有保存的 Gist ID，使用默认值
+            gistIdField.value = DEFAULT_GIST_ID;
+            // 同时保存到 localStorage，方便后续使用
+            localStorage.setItem(PAGE_ID + '_gist_id', DEFAULT_GIST_ID);
+        }
+    }
 }
 
+
+// ========== 保存设置按钮 ==========
+const saveSettingsBtn = document.getElementById('saveGistSettingsBtn');
+if(saveSettingsBtn) {
+    saveSettingsBtn.addEventListener('click', function() {
+        saveGistSettings();  // 复用已有的保存函数
+        const statusDiv = document.getElementById('syncStatus');
+        if(statusDiv) {
+            statusDiv.innerText = '✅ 设置已保存';
+            setTimeout(() => {
+                if(statusDiv.innerText === '✅ 设置已保存') {
+                    statusDiv.innerText = '';
+                }
+            }, 2000);
+        }
+    });
+}
 function saveGistSettings() {
     const tokenField = document.getElementById('gistToken');
     const gistIdField = document.getElementById('gistId');
